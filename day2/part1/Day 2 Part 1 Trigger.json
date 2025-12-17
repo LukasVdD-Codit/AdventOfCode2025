@@ -1,0 +1,118 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "actions": {
+            "Initialize_Input": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "Input",
+                            "type": "array",
+                            "value": "@split('3737332285-3737422568,5858547751-5858626020,166911-236630,15329757-15423690,753995-801224,1-20,2180484-2259220,24-47,73630108-73867501,4052222-4199117,9226851880-9226945212,7337-24735,555454-591466,7777695646-7777817695,1070-2489,81504542-81618752,2584-6199,8857860-8922218,979959461-980003045,49-128,109907-161935,53514821-53703445,362278-509285,151-286,625491-681593,7715704912-7715863357,29210-60779,3287787-3395869,501-921,979760-1021259', ',')"
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "For_each_Range": {
+                "type": "Foreach",
+                "foreach": "@variables('Input')",
+                "actions": {
+                    "Calculate_Range": {
+                        "type": "Compose",
+                        "inputs": "@sub(int(last(split(items('For_each_Range'), '-'))), int(first(split(items('For_each_Range'), '-'))))"
+                    },
+                    "Is_Range_Greater_then_or_Equals_10000": {
+                        "type": "If",
+                        "expression": {
+                            "and": [
+                                {
+                                    "greaterOrEquals": [
+                                        "@outputs('Calculate_Range')",
+                                        10000
+                                    ]
+                                }
+                            ]
+                        },
+                        "actions": {
+                            "Send_message_invalid_range": {
+                                "type": "ApiConnection",
+                                "inputs": {
+                                    "host": {
+                                        "connection": {
+                                            "referenceName": "servicebus-1"
+                                        }
+                                    },
+                                    "method": "post",
+                                    "body": {
+                                        "SessionId": "@guid()",
+                                        "ContentData": "@base64(items('For_each_Range'))"
+                                    },
+                                    "path": "/@{encodeURIComponent(encodeURIComponent('day2part1invalid'))}/messages",
+                                    "queries": {
+                                        "systemProperties": "None"
+                                    }
+                                }
+                            }
+                        },
+                        "else": {
+                            "actions": {
+                                "Send_message_valid_range": {
+                                    "type": "ApiConnection",
+                                    "inputs": {
+                                        "host": {
+                                            "connection": {
+                                                "referenceName": "servicebus-1"
+                                            }
+                                        },
+                                        "method": "post",
+                                        "body": {
+                                            "SessionId": "@guid()",
+                                            "ContentData": "@base64(items('For_each_Range'))"
+                                        },
+                                        "path": "/@{encodeURIComponent(encodeURIComponent('day2part1'))}/messages",
+                                        "queries": {
+                                            "systemProperties": "None"
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Calculate_Range": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Initialize_Input": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "triggers": {
+            "Recurrence": {
+                "type": "Recurrence",
+                "recurrence": {
+                    "interval": 12,
+                    "frequency": "Month"
+                }
+            }
+        },
+        "staticResults": {
+            "Send_message0": {
+                "status": "Succeeded",
+                "code": 202,
+                "outputs": {
+                    "statusCode": "OK"
+                }
+            }
+        }
+    },
+    "kind": "Stateful"
+}

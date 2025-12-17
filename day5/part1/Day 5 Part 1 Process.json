@@ -1,0 +1,210 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "actions": {
+            "Initialize_variables": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "Valid",
+                            "type": "boolean",
+                            "value": false
+                        },
+                        {
+                            "name": "Counter",
+                            "type": "integer",
+                            "value": 0
+                        },
+                        {
+                            "name": "ID",
+                            "type": "integer",
+                            "value": "@int(body('Get_messages_(V2)')['QueueMessagesList']['QueueMessage'][0]['MessageText'])"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Delete_message": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Get_All_Ranges": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "azuretables"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('day5ranges')}/entities"
+                },
+                "runAfter": {
+                    "Initialize_variables": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Is_Valid": {
+                "type": "If",
+                "expression": {
+                    "and": [
+                        {
+                            "equals": [
+                                "@variables('Valid')",
+                                "@true"
+                            ]
+                        }
+                    ]
+                },
+                "actions": {
+                    "Insert_Valid": {
+                        "type": "ApiConnection",
+                        "inputs": {
+                            "host": {
+                                "connection": {
+                                    "referenceName": "azuretables"
+                                }
+                            },
+                            "method": "post",
+                            "body": {
+                                "PartitionKey": "day5",
+                                "RowKey": "@{guid()}",
+                                "ID": "@variables('ID')",
+                                "Index": "@body('Get_messages_(V2)')['QueueMessagesList']['QueueMessage'][0]['DequeueCount']",
+                                "Counter": "@variables('Counter')"
+                            },
+                            "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('day5outputs')}/entities"
+                        }
+                    }
+                },
+                "else": {
+                    "actions": {}
+                },
+                "runAfter": {
+                    "Until": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Until": {
+                "type": "Until",
+                "expression": "@equals(variables('Valid'), true)",
+                "limit": {
+                    "count": 174
+                },
+                "actions": {
+                    "Check_If_Valid": {
+                        "type": "If",
+                        "expression": {
+                            "and": [
+                                {
+                                    "lessOrEquals": [
+                                        "@variables('ID')",
+                                        "@int(body('Get_All_Ranges')['value'][variables('Counter')]['Last'])"
+                                    ]
+                                },
+                                {
+                                    "greaterOrEquals": [
+                                        "@variables('ID')",
+                                        "@int(body('Get_All_Ranges')['value'][variables('Counter')]['First'])"
+                                    ]
+                                }
+                            ]
+                        },
+                        "actions": {
+                            "Set_Valid": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "Valid",
+                                    "value": true
+                                }
+                            }
+                        },
+                        "else": {
+                            "actions": {}
+                        }
+                    },
+                    "Increment_Counter": {
+                        "type": "IncrementVariable",
+                        "inputs": {
+                            "name": "Counter",
+                            "value": 1
+                        },
+                        "runAfter": {
+                            "Check_If_Valid": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Get_All_Ranges": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Get_messages_(V2)": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "azurequeues-1"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/queues/@{encodeURIComponent('day5')}/messages",
+                    "queries": {
+                        "numofmessages": "1"
+                    }
+                },
+                "runAfter": {}
+            },
+            "Delete_message": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "queueName": "day5",
+                        "messageId": "@body('Get_messages_(V2)')['QueueMessagesList']['QueueMessage'][0]['MessageId']",
+                        "popReceipt": "@body('Get_messages_(V2)')['QueueMessagesList']['QueueMessage'][0]['PopReceipt']"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "azurequeues",
+                        "operationId": "deleteMessage",
+                        "serviceProviderId": "/serviceProviders/azurequeues"
+                    }
+                },
+                "runAfter": {
+                    "Get_messages_(V2)": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "triggers": {
+            "When_a_specified_number_of_messages_are_in_a_given_queue_(V2)": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "azurequeues-1"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/queues/@{encodeURIComponent('day5')}/count_trigger",
+                    "queries": {
+                        "threshold": 1
+                    }
+                },
+                "recurrence": {
+                    "interval": 3,
+                    "frequency": "Second"
+                }
+            }
+        }
+    },
+    "kind": "Stateful"
+}

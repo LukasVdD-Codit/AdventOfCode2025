@@ -1,0 +1,214 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "actions": {
+            "Initialize_variables": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "First",
+                            "type": "integer",
+                            "value": "@int(first(split(base64ToString(triggerBody()?['ContentData']), '-')))"
+                        },
+                        {
+                            "name": "Last",
+                            "type": "integer",
+                            "value": "@int(last(split(base64ToString(triggerBody()?['ContentData']), '-')))"
+                        },
+                        {
+                            "name": "Stop",
+                            "type": "boolean",
+                            "value": false
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "Until": {
+                "type": "Until",
+                "expression": "@equals(variables('Stop'), true)",
+                "limit": {
+                    "count": 10,
+                    "timeout": "PT1H"
+                },
+                "actions": {
+                    "Concat_Collection": {
+                        "type": "Compose",
+                        "inputs": "@concat(variables('First'), '-', outputs('Calculate_Max_Gap'), ',', add(outputs('Calculate_Max_Gap'),1), '-', variables('Last'))",
+                        "runAfter": {
+                            "Calculate_Max_Gap": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Calculate_Max_Gap": {
+                        "type": "Compose",
+                        "inputs": "@add(variables('First'), 9999)"
+                    },
+                    "New_Gap_is_Greater_then_or_Equal_10000": {
+                        "type": "If",
+                        "expression": {
+                            "and": [
+                                {
+                                    "greaterOrEquals": [
+                                        "@outputs('Calculate_New_Gap')",
+                                        10000
+                                    ]
+                                }
+                            ]
+                        },
+                        "actions": {
+                            "Set_First": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "First",
+                                    "value": "@int(first(split(outputs('New_Gap_in_String'), '-')))"
+                                }
+                            }
+                        },
+                        "else": {
+                            "actions": {
+                                "Gap_is_not_Zero": {
+                                    "type": "If",
+                                    "expression": {
+                                        "and": [
+                                            {
+                                                "not": {
+                                                    "equals": [
+                                                        "@outputs('Calculate_New_Gap')",
+                                                        0
+                                                    ]
+                                                }
+                                            }
+                                        ]
+                                    },
+                                    "actions": {
+                                        "Send_message_Last": {
+                                            "type": "ApiConnection",
+                                            "inputs": {
+                                                "host": {
+                                                    "connection": {
+                                                        "referenceName": "servicebus-1"
+                                                    }
+                                                },
+                                                "method": "post",
+                                                "body": {
+                                                    "SessionId": "@guid()",
+                                                    "ContentData": "@base64(last(split(outputs('Concat_Collection'), ',')))"
+                                                },
+                                                "path": "/@{encodeURIComponent(encodeURIComponent('day2part1'))}/messages",
+                                                "queries": {
+                                                    "systemProperties": "None"
+                                                }
+                                            }
+                                        },
+                                        "Stop": {
+                                            "type": "SetVariable",
+                                            "inputs": {
+                                                "name": "Stop",
+                                                "value": true
+                                            },
+                                            "runAfter": {
+                                                "Send_message_Last": [
+                                                    "SUCCEEDED"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "else": {
+                                        "actions": {
+                                            "Abort": {
+                                                "type": "SetVariable",
+                                                "inputs": {
+                                                    "name": "Stop",
+                                                    "value": true
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Calculate_New_Gap": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "New_Gap_in_String": {
+                        "type": "Compose",
+                        "inputs": "@last(split(outputs('Concat_Collection'), ','))",
+                        "runAfter": {
+                            "Send_message": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Calculate_New_Gap": {
+                        "type": "Compose",
+                        "inputs": "@sub(int(last(split(outputs('New_Gap_in_String'), '-'))), int(first(split(outputs('New_Gap_in_String'), '-'))))",
+                        "runAfter": {
+                            "New_Gap_in_String": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Send_message": {
+                        "type": "ApiConnection",
+                        "inputs": {
+                            "host": {
+                                "connection": {
+                                    "referenceName": "servicebus-1"
+                                }
+                            },
+                            "method": "post",
+                            "body": {
+                                "SessionId": "@guid()",
+                                "ContentData": "@base64(first(split(outputs('Concat_Collection'), ',')))"
+                            },
+                            "path": "/@{encodeURIComponent(encodeURIComponent('day2part1'))}/messages",
+                            "queries": {
+                                "systemProperties": "None"
+                            }
+                        },
+                        "runAfter": {
+                            "Concat_Collection": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Initialize_variables": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "triggers": {
+            "When_a_message_is_received_in_a_topic_subscription_(auto-complete)": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "servicebus-1"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/@{encodeURIComponent(encodeURIComponent('day2part1invalid'))}/subscriptions/@{encodeURIComponent('day2part1')}/messages/head",
+                    "queries": {
+                        "subscriptionType": "Main"
+                    }
+                },
+                "recurrence": {
+                    "interval": 1,
+                    "frequency": "Minute"
+                }
+            }
+        }
+    },
+    "kind": "Stateful"
+}

@@ -1,0 +1,249 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "actions": {
+            "Initialize_variables": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "RowCurrent",
+                            "type": "array",
+                            "value": "@chunk(json(base64ToString(triggerBody()?['ContentData']))['rowCurrent'], 1)"
+                        },
+                        {
+                            "name": "RowAbove",
+                            "type": "array",
+                            "value": "@chunk(json(base64ToString(triggerBody()?['ContentData']))['rowAbove'], 1)"
+                        },
+                        {
+                            "name": "RowBelow",
+                            "type": "array",
+                            "value": "@chunk(json(base64ToString(triggerBody()?['ContentData']))['rowBelow'], 1)"
+                        },
+                        {
+                            "name": "Counter",
+                            "type": "integer",
+                            "value": 1
+                        },
+                        {
+                            "name": "MaxLength",
+                            "type": "integer",
+                            "value": "@sub(length(json(base64ToString(triggerBody()?['ContentData']))['rowCurrent']), 1)"
+                        },
+                        {
+                            "name": "NewRow",
+                            "type": "string"
+                        },
+                        {
+                            "name": "PaperAmount",
+                            "type": "integer",
+                            "value": 0
+                        },
+                        {
+                            "name": "RowIndex",
+                            "type": "integer",
+                            "value": "@json(base64ToString(triggerBody()?['ContentData']))['rowIndex']"
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "Until": {
+                "type": "Until",
+                "expression": "@equals(variables('Counter'), variables('MaxLength'))",
+                "limit": {
+                    "timeout": "PT20M"
+                },
+                "actions": {
+                    "Compose_Spaces_Around": {
+                        "type": "Compose",
+                        "inputs": {
+                            "aboveLeft": "@{variables('RowAbove')[sub(variables('Counter'), 1)]}",
+                            "aboveCenter": "@{variables('RowAbove')[variables('Counter')]}",
+                            "aboveRight": "@{variables('RowAbove')[add(variables('Counter'), 1)]}",
+                            "currentLeft": "@{variables('RowCurrent')[sub(variables('Counter'), 1)]}",
+                            "current": "@{variables('RowCurrent')[variables('Counter')]}",
+                            "currentRight": "@{variables('RowCurrent')[add(variables('Counter'), 1)]}",
+                            "belowLeft": "@{variables('RowBelow')[sub(variables('Counter'), 1)]}",
+                            "belowCenter": "@{variables('RowBelow')[variables('Counter')]}",
+                            "belowRight": "@{variables('RowBelow')[add(variables('Counter'), 1)]}"
+                        }
+                    },
+                    "Compose_String_Result": {
+                        "type": "Compose",
+                        "inputs": "@concat(outputs('Compose_Spaces_Around')['aboveLeft'],outputs('Compose_Spaces_Around')['aboveCenter'],outputs('Compose_Spaces_Around')['aboveRight'],outputs('Compose_Spaces_Around')['currentLeft'],outputs('Compose_Spaces_Around')['currentRight'],outputs('Compose_Spaces_Around')['belowLeft'],outputs('Compose_Spaces_Around')['belowCenter'],outputs('Compose_Spaces_Around')['belowRight'])",
+                        "runAfter": {
+                            "Compose_Spaces_Around": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Paper_around_lower_then_4": {
+                        "type": "If",
+                        "expression": {
+                            "and": [
+                                {
+                                    "less": [
+                                        "@length(replace(outputs('Compose_String_Result'), '.', ''))",
+                                        4
+                                    ]
+                                },
+                                {
+                                    "equals": [
+                                        "@outputs('Compose_Spaces_Around')['current']",
+                                        "@"
+                                    ]
+                                }
+                            ]
+                        },
+                        "actions": {
+                            "Append_to_NewRow": {
+                                "type": "AppendToStringVariable",
+                                "inputs": {
+                                    "name": "NewRow",
+                                    "value": "."
+                                }
+                            },
+                            "Increment_PaperAmount": {
+                                "type": "IncrementVariable",
+                                "inputs": {
+                                    "name": "PaperAmount",
+                                    "value": 1
+                                },
+                                "runAfter": {
+                                    "Append_to_NewRow": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            }
+                        },
+                        "else": {
+                            "actions": {
+                                "Append_to_NewRow_Current_Space": {
+                                    "type": "AppendToStringVariable",
+                                    "inputs": {
+                                        "name": "NewRow",
+                                        "value": "@outputs('Compose_Spaces_Around')['current']"
+                                    }
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Compose_String_Result": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Increment_Counter": {
+                        "type": "IncrementVariable",
+                        "inputs": {
+                            "name": "Counter",
+                            "value": 1
+                        },
+                        "runAfter": {
+                            "Paper_around_lower_then_4": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Initialize_variables": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Insert_Entity_PaperAmount": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "azuretables"
+                        }
+                    },
+                    "method": "post",
+                    "body": {
+                        "PartitionKey": "day4",
+                        "RowKey": "@{guid()}",
+                        "Amount": "@variables('PaperAmount')"
+                    },
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('day4papercounts')}/entities"
+                },
+                "runAfter": {
+                    "Merge_Row": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Finish_message_to_Queue": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "queueName": "day4finishedruns",
+                        "message": "finished"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "azurequeues",
+                        "operationId": "putMessage",
+                        "serviceProviderId": "/serviceProviders/azurequeues"
+                    }
+                },
+                "runAfter": {
+                    "Insert_Entity_PaperAmount": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Merge_Row": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "azuretables"
+                        }
+                    },
+                    "method": "patch",
+                    "body": {
+                        "Row": "@{concat('.', variables('NewRow'), '.')}",
+                        "RowIndex@odata.type": "Edm.Int32",
+                        "RowIndex": "@variables('RowIndex')"
+                    },
+                    "headers": {
+                        "If-Match": "*"
+                    },
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('day4part1')}/entities/etag(PartitionKey='@{encodeURIComponent('day4')}',RowKey='@{encodeURIComponent(string(variables('RowIndex')))}')"
+                },
+                "runAfter": {
+                    "Until": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "triggers": {
+            "When_a_message_is_received_in_a_topic_subscription_(auto-complete)": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "servicebus"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/@{encodeURIComponent(encodeURIComponent('day4part2'))}/subscriptions/@{encodeURIComponent('process')}/messages/head",
+                    "queries": {
+                        "subscriptionType": "Main"
+                    }
+                },
+                "recurrence": {
+                    "interval": 1,
+                    "frequency": "Minute"
+                }
+            }
+        }
+    },
+    "kind": "Stateful"
+}

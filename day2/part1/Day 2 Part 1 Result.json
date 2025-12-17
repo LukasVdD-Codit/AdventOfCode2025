@@ -1,0 +1,73 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "actions": {
+            "Initialize_Result": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "Result",
+                            "type": "integer",
+                            "value": 0
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "Get_entities_from_Table_(V2)": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "azuretables-1"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('day2part1output')}/entities"
+                },
+                "runAfter": {
+                    "Initialize_Result": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "For_each_Entity": {
+                "type": "foreach",
+                "foreach": "@body('Get_entities_from_Table_(V2)')?['value']",
+                "actions": {
+                    "Increment_variable": {
+                        "type": "IncrementVariable",
+                        "inputs": {
+                            "name": "Result",
+                            "value": "@int(items('For_each_Entity')['Value'])"
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Get_entities_from_Table_(V2)": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Result": {
+                "type": "Compose",
+                "inputs": "@variables('Result')",
+                "runAfter": {
+                    "For_each_Entity": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "triggers": {
+            "Manual": {
+                "type": "Request",
+                "kind": "Http"
+            }
+        }
+    },
+    "kind": "Stateful"
+}

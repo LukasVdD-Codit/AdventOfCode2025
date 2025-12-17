@@ -1,0 +1,126 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "actions": {
+            "Compose": {
+                "type": "Compose",
+                "inputs": "@variables('paper')",
+                "runAfter": {
+                    "Until": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Initialize_variables": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "entitiesleft",
+                            "type": "integer",
+                            "value": 1001
+                        },
+                        {
+                            "name": "paper",
+                            "type": "integer",
+                            "value": 0
+                        },
+                        {
+                            "name": "token",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "Until": {
+                "type": "Until",
+                "expression": "@less(variables('entitiesleft'), 1000)",
+                "limit": {
+                    "timeout": "PT10M"
+                },
+                "actions": {
+                    "Query_Entities": {
+                        "type": "ServiceProvider",
+                        "inputs": {
+                            "parameters": {
+                                "tableName": "day4papercounts",
+                                "continuationToken": "@variables('token')",
+                                "filter": "PartitionKey eq 'day4' and Amount ne 0"
+                            },
+                            "serviceProviderConfiguration": {
+                                "connectionName": "azureTables-1",
+                                "operationId": "queryEntities",
+                                "serviceProviderId": "/serviceProviders/azureTables"
+                            }
+                        }
+                    },
+                    "For_each_Entity": {
+                        "type": "Foreach",
+                        "foreach": "@body('Query_Entities')?['entities']",
+                        "actions": {
+                            "Increment_Paper": {
+                                "type": "IncrementVariable",
+                                "inputs": {
+                                    "name": "paper",
+                                    "value": "@int(item()?['Amount'])"
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Query_Entities": [
+                                "SUCCEEDED"
+                            ]
+                        },
+                        "runtimeConfiguration": {
+                            "concurrency": {
+                                "repetitions": 50
+                            }
+                        }
+                    },
+                    "Set_Left": {
+                        "type": "SetVariable",
+                        "inputs": {
+                            "name": "entitiesleft",
+                            "value": "@length(body('Query_Entities')?['entities'])"
+                        },
+                        "runAfter": {
+                            "Set_Token": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Set_Token": {
+                        "type": "SetVariable",
+                        "inputs": {
+                            "name": "token",
+                            "value": "@body('Query_Entities')?['continuationToken']"
+                        },
+                        "runAfter": {
+                            "For_each_Entity": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Initialize_variables": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "triggers": {
+            "Recurrence": {
+                "type": "Recurrence",
+                "recurrence": {
+                    "interval": 1,
+                    "frequency": "Month"
+                }
+            }
+        }
+    },
+    "kind": "Stateful"
+}

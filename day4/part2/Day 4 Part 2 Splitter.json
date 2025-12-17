@@ -1,0 +1,152 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "actions": {
+            "Initialize_variables": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "Counter",
+                            "type": "integer",
+                            "value": 1
+                        },
+                        {
+                            "name": "AmountRows",
+                            "type": "integer",
+                            "value": "@int(base64ToString(triggerBody()?['ContentData']))"
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "Until": {
+                "type": "Until",
+                "expression": "@equals(variables('Counter'), sub(variables('AmountRows'), 1))",
+                "limit": {
+                    "timeout": "PT30M"
+                },
+                "actions": {
+                    "Increment_Counter": {
+                        "type": "IncrementVariable",
+                        "inputs": {
+                            "name": "Counter",
+                            "value": 1
+                        },
+                        "runAfter": {
+                            "Send_message": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Compose_Rows": {
+                        "type": "Compose",
+                        "inputs": {
+                            "rowIndex": "@variables('Counter')",
+                            "rowAbove": "@outputs('Sort_Array_of_Entities')[0]['Row']",
+                            "rowCurrent": "@outputs('Sort_Array_of_Entities')[1]['Row']",
+                            "rowBelow": "@outputs('Sort_Array_of_Entities')[2]['Row']"
+                        },
+                        "runAfter": {
+                            "Sort_Array_of_Entities": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Sort_Array_of_Entities": {
+                        "type": "Compose",
+                        "inputs": "@sort(body('Convert_String_to_Int'),'RowIndex')",
+                        "runAfter": {
+                            "Convert_String_to_Int": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Get_Rows": {
+                        "type": "ApiConnection",
+                        "inputs": {
+                            "host": {
+                                "connection": {
+                                    "referenceName": "azuretables"
+                                }
+                            },
+                            "method": "get",
+                            "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('day4part1')}/entities",
+                            "queries": {
+                                "$filter": "PartitionKey eq 'day4' and (RowKey eq '@{sub(variables('Counter'), 1)}' or RowKey eq '@{variables('Counter')}' or RowKey eq '@{add(variables('Counter'), 1)}')"
+                            }
+                        }
+                    },
+                    "Send_message": {
+                        "type": "ApiConnection",
+                        "inputs": {
+                            "host": {
+                                "connection": {
+                                    "referenceName": "servicebus"
+                                }
+                            },
+                            "method": "post",
+                            "body": {
+                                "SessionId": "@guid()",
+                                "ContentData": "@base64(outputs('Compose_Rows'))"
+                            },
+                            "path": "/@{encodeURIComponent(encodeURIComponent('day4part2'))}/messages",
+                            "queries": {
+                                "systemProperties": "None"
+                            }
+                        },
+                        "runAfter": {
+                            "Compose_Rows": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Convert_String_to_Int": {
+                        "type": "Select",
+                        "inputs": {
+                            "from": "@body('Get_Rows')['value']",
+                            "select": {
+                                "Row": "@item()['Row']",
+                                "RowIndex": "@int(item()['RowIndex'])"
+                            }
+                        },
+                        "runAfter": {
+                            "Get_Rows": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Initialize_variables": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "triggers": {
+            "When_a_message_is_received_in_a_topic_subscription_(auto-complete)": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "servicebus"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/@{encodeURIComponent(encodeURIComponent('day4part2trigger'))}/subscriptions/@{encodeURIComponent('trigger')}/messages/head",
+                    "queries": {
+                        "subscriptionType": "Main"
+                    }
+                },
+                "recurrence": {
+                    "interval": 1,
+                    "frequency": "Minute"
+                }
+            }
+        }
+    },
+    "kind": "Stateful"
+}

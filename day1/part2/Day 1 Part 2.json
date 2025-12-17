@@ -1,0 +1,280 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "actions": {
+            "Split_Input": {
+                "type": "Select",
+                "inputs": {
+                    "from": "@split(variables('Input'), '\n')",
+                    "select": {
+                        "Rotation": "@substring(item(), 0, 1)",
+                        "Clicks": "@int(substring(item(), 1))"
+                    }
+                },
+                "runAfter": {
+                    "Initialize_variables": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Initialize_variables": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "Dial",
+                            "type": "integer",
+                            "value": 50
+                        },
+                        {
+                            "name": "Input",
+                            "type": "string",
+                            "value": "R17\nL19\nR24\nR37\nR29\nR37\nR35\nR40\nL7\nL37\nL45\nR44\nR2\nR12\nL44\nR31\nL29\nR34\nR9\nR22\nR44\nR30\nL22\nR13\nL3\nR5\nL43\nR31\nR47\nR43\nR11\nR47\nL34\nL43\nR40\nR29\nL4\nL6\nL25\nR16\nL12\nR38\nL41\nR17\nR45\nL21\nL8\nL24\nR6\nL45\nL33\nL29\nL67\nL44\nR62\nR38\nL86\nL14\nL69\nR69\nR26\nR74\nL33\nR24\nL80\nL48\nL96\nL67\nL93\nR72\nL79\nL58\nL66\nR53\nR56\nR55\nL40\nR70\nR91\nR53\nR69\nR17\nL61\nR66\nR91\nL96\nR47\nL47\nR41\nL67\nL93\nR19\nL88\nR88\nR33\nL33\nL71\nR96\nR75\nL56\nR69\nL63\nL50\nL89\nR85\nL96\nR95\nR8\nL88\nR25\nL17\nR42\nL10\nL7\nL48\nR2\nL574\nL97\nL93\nR62\nR19\nR981\nR6\nL88\nL118\nL994\nL57\nL55\nL68\nL26\nL105\nR67\nR81\nL23\nR80\nR61\nR47\nL44\nR56\nL13\nL67\nL640\nL63\nL309\nR44\nR28\nR795\nL95\nR83\nL32\nR49\nR143\nR919\nL27\nR801\nL611\nR66\nR49\nR854\nR18\nR88\nL121\nL80\nR1\nR84\nR16\nL64\nR55\nR909\nL37\nL338\nR954\nL79\nR6\nR16\nL44\nL78\nR72\nR28\nR32\nR968\nL53\nL74\nR45\nL370\nL448\nR858\nL60\nL5\nL15\nL478\nL50\nR550\nR80\nL30\nR79\nL29\nL451\nL99\nL21\nL29\nR14\nL214\nL40\nR39\nL99\nL8\nR8\nL90\nR90\nL57\nL77\nR34\nL61\nL55\nR16\nR80\nL97\nR69\nL52\nR40\nL140\nR75\nL28\nR53\nL31\nL56\nL423\nL590\nR44\nR86\nR70\nR30\nL41\nL7\nR318\nR27\nL27\nR99\nL97\nL31\nR29\nL864\nR64\nR39\nL39\nL77\nR809\nR68\nL8\nL92\nL88\nL912\nL99\nL55\nR341\nL953\nL34\nL16\nL7\nR123\nL58\nL42\nR45\nR77\nL62\nL572\nR12\nL823\nR23\nR23\nL92\nL31\nL74\nL226\nL6\nL190\nR70\nR63\nL37\nL468\nR91\nR152\nR35\nR49\nR954\nR15\nL28\nL60\nL40\nR15\nL15\nR4\nR15\nL3\nL16\nL868\nL61\nR949\nR80\nR95\nR292\nL521\nL436\nR88\nR82\nR42\nL415\nL14\nL13\nR46\nL46\nR973\nR27\nL73\nL27\nL22\nR22\nR74\nL188\nL30\nR11\nL32\nR61\nL63\nR95\nR48\nR32\nR92\nR51\nR305\nL56\nR12\nR78\nL90\nR47\nL47\nR165\nR35\nR65\nL65\nR642\nL91\nL51\nR5\nR38\nL126\nL72\nL48\nR4\nL12\nR58\nR53\nL12\nR12\nL2\nR34\nR55\nR79\nR49\nL26\nL24\nR35\nL28\nL98\nR58\nL57\nR89\nL64\nR80\nR65\nL88\nL99\nL58\nR80\nL80\nR92\nL10\nL71\nR89\nR36\nR64\nL54\nL68\nL66\nL12\nR63\nL963\nL98\nR98\nL10\nL66\nR78\nL4\nR18\nL94\nR38\nR140\nR7\nL7\nR591\nL84\nR93\nL363\nR63\nR47\nL47\nL767\nL33\nR42\nL74\nL73\nR5\nR7\nL55\nR48\nL924\nR30\nL6\nR47\nR53\nL94\nR174\nL680\nR8\nR6\nL90\nL69\nL82\nR759\nR57\nR81\nL72\nR82\nL69\nL11\nR32\nR1\nR67\nL71\nL70\nR841\nR66\nL732\nL34\nL71\nR35\nR72\nR64\nR30\nR81\nR89\nL59\nR60\nL1\nR18\nL74\nL544\nL344\nL85\nR14\nL55\nL730\nL84\nL48\nR53\nL21\nL1\nR86\nR29\nL14\nL27\nR589\nR80\nR21\nR33\nR54\nL338\nL912\nR33\nR67\nL65\nR19\nR83\nR41\nL51\nR79\nR33\nL75\nR336\nR91\nR39\nR24\nL34\nR64\nR271\nL69\nL586\nR43\nR77\nL57\nR24\nR13\nR93\nL53\nL502\nR82\nL20\nL90\nR19\nR16\nR55\nL19\nR15\nR7\nL503\nL33\nL8\nL29\nL60\nL699\nR90\nL61\nR18\nR66\nL387\nL20\nL377\nL66\nR66\nL336\nR36\nL86\nR15\nR71\nL31\nL17\nL29\nL63\nL67\nR7\nR692\nL92\nL38\nR238\nL8\nL51\nL376\nR25\nL90\nL64\nR48\nL622\nR64\nL26\nR36\nL936\nR95\nR505\nR21\nL21\nR810\nL48\nL62\nL98\nL58\nR56\nL69\nR169\nR41\nL41\nL42\nR8\nR34\nR594\nR16\nL29\nL15\nR34\nL25\nL68\nL18\nR5\nR61\nR55\nR16\nR561\nR13\nR51\nL37\nR40\nR46\nR25\nR75\nR13\nL13\nR82\nL93\nL30\nR261\nL20\nR2\nR49\nL31\nR38\nR91\nR561\nR971\nR19\nR71\nR29\nL25\nR10\nR17\nL987\nR85\nR96\nR282\nL70\nL69\nR61\nR88\nR68\nL54\nR87\nL24\nR8\nL73\nR233\nR657\nR52\nL53\nL49\nL340\nR37\nL78\nL72\nR813\nL88\nR88\nR65\nL34\nR353\nR79\nL40\nR77\nL45\nR108\nR29\nL14\nL13\nL77\nL7\nL11\nR39\nL9\nL4\nL96\nR48\nR29\nL60\nR883\nL3\nL186\nR87\nL67\nR24\nR47\nR20\nR32\nL54\nR18\nL18\nL49\nR49\nL27\nL35\nR85\nL445\nL47\nR44\nL908\nR42\nR19\nL32\nR22\nR25\nL43\nL47\nR63\nL64\nR145\nL97\nR80\nR720\nR11\nR51\nR96\nR353\nR832\nL26\nR83\nR87\nR32\nR81\nR88\nL668\nL54\nR434\nR490\nR31\nR69\nL372\nL84\nR34\nL468\nR33\nL33\nL79\nL421\nR73\nR45\nL87\nL183\nL580\nL17\nR49\nR91\nL91\nR40\nR22\nR99\nR717\nL78\nR111\nR17\nL28\nR2\nL528\nR613\nL8\nL79\nL86\nR2\nL34\nR26\nR92\nL904\nR2\nL69\nR15\nL727\nR961\nR890\nR7\nR318\nL93\nL8\nL19\nL343\nR37\nR64\nR37\nL968\nR424\nL24\nL51\nR59\nL31\nR23\nR94\nL88\nL55\nR949\nR33\nR15\nL78\nR30\nL12\nR712\nL64\nL36\nL13\nL87\nL28\nL85\nL854\nL63\nL33\nR25\nR181\nR57\nL1\nR1\nR155\nL55\nL99\nL33\nL109\nL65\nL94\nL99\nR99\nR10\nR28\nR63\nR99\nL7\nL93\nL43\nR43\nR31\nL58\nL673\nL183\nL17\nR43\nR47\nR10\nR20\nR2\nL22\nL55\nL445\nL13\nL887\nR4\nR26\nL825\nR45\nR68\nR40\nR227\nR11\nR116\nL79\nR85\nR682\nR66\nL14\nR14\nL66\nL86\nR886\nL72\nR80\nL96\nL6\nR72\nL27\nL8\nL43\nR97\nL78\nL19\nL21\nL26\nL17\nR64\nR62\nR72\nL34\nL85\nL19\nR13\nR91\nL15\nL5\nR53\nR210\nR362\nL197\nR47\nR28\nL47\nL46\nR10\nL37\nR757\nR70\nL459\nL155\nL53\nL73\nL50\nL5\nL58\nR24\nR966\nL27\nR104\nR77\nL29\nL52\nR36\nR64\nL628\nL72\nR74\nL52\nL58\nR336\nR495\nR83\nL36\nR87\nL58\nL29\nL42\nR55\nR48\nR97\nR126\nL71\nL70\nL12\nL36\nL972\nL65\nR28\nR2\nL30\nL76\nR67\nR56\nL69\nR22\nL15\nR12\nL25\nR34\nR56\nL70\nR8\nL44\nR44\nL89\nL14\nL98\nL499\nR61\nL40\nR10\nL384\nL83\nR36\nL6\nR42\nR323\nR63\nR78\nL99\nL98\nR958\nL69\nL92\nR93\nR55\nR58\nR94\nL564\nR843\nR28\nR97\nR84\nR207\nL42\nL977\nL76\nL63\nL91\nL646\nL949\nR49\nL46\nR89\nR57\nR44\nL978\nL3\nL10\nL53\nR30\nL30\nL69\nR769\nR80\nL87\nL6\nL47\nL70\nR96\nR87\nR47\nL56\nL55\nR11\nR16\nR84\nL8\nL74\nL18\nL55\nL54\nR9\nL42\nR42\nL86\nR8\nL22\nR853\nR27\nL780\nR9\nR91\nR54\nL315\nR46\nR8\nL44\nL456\nL93\nR87\nR43\nR14\nR956\nL29\nL971\nL658\nR16\nL74\nR86\nR262\nR29\nL56\nL19\nR43\nR41\nL70\nL69\nR69\nR71\nR29\nL63\nL37\nL50\nR944\nR6\nL41\nR74\nL133\nL13\nL25\nR938\nL4\nR555\nR463\nL80\nR679\nL48\nL165\nL702\nL94\nR96\nR53\nR495\nR52\nR22\nR78\nR719\nL19\nR96\nR224\nR80\nL20\nL74\nR614\nR98\nR82\nL833\nL67\nR43\nR30\nL4\nR9\nR22\nL95\nR62\nL555\nL357\nR80\nL53\nR82\nL86\nL83\nL18\nR623\nL24\nL676\nL84\nR88\nL22\nR43\nR75\nL43\nL768\nL66\nL95\nL28\nR77\nL90\nL506\nR19\nR440\nR59\nR93\nL3\nR11\nL58\nL740\nR7\nL63\nL58\nR12\nR624\nL24\nR333\nL40\nL93\nR10\nR90\nL37\nR48\nR89\nL56\nL920\nL24\nR81\nR19\nL3\nR3\nL94\nR94\nR7\nL2\nR95\nL28\nR8\nR648\nL28\nR89\nR25\nL822\nR52\nL854\nR46\nR2\nR40\nL40\nR62\nL16\nL84\nL33\nR60\nL605\nR97\nL45\nR59\nL733\nR13\nR87\nR56\nR31\nL38\nR51\nL81\nR81\nR84\nL138\nL46\nR24\nR260\nR95\nL29\nR50\nR813\nR37\nR50\nL70\nL30\nR6\nL96\nL710\nR94\nR99\nL52\nL41\nR93\nR7\nL18\nL54\nL628\nL80\nL16\nL97\nL7\nL178\nR436\nL58\nR37\nL73\nR25\nR11\nL55\nR36\nR92\nR8\nR2\nL83\nR29\nR49\nL10\nL860\nL8\nL52\nL53\nR5\nL99\nR20\nR27\nL95\nR89\nR79\nL21\nR1\nR56\nR43\nR78\nR22\nL43\nR5\nR11\nR99\nL43\nL55\nR41\nR30\nL55\nR285\nR84\nR86\nR21\nR816\nR71\nL53\nL84\nL16\nR71\nR50\nR79\nR90\nR310\nL70\nL175\nR42\nL45\nL871\nL51\nR70\nR8\nL2\nR60\nR34\nL29\nR80\nL94\nL675\nL45\nR63\nR25\nR75\nL61\nL48\nR75\nR97\nR47\nR90\nL99\nL1\nR769\nL15\nR34\nR99\nL387\nR23\nR96\nR81\nR16\nL11\nR396\nR13\nL14\nR63\nR38\nR99\nR18\nR611\nR140\nL62\nL82\nR621\nR79\nR48\nR27\nR43\nL20\nL32\nR9\nR16\nR84\nR52\nL63\nR11\nL26\nL12\nL62\nL88\nR73\nR955\nR60\nL72\nR353\nR819\nL70\nR27\nL57\nL66\nL50\nL90\nR6\nL15\nL785\nL89\nR89\nL88\nL198\nR95\nL98\nR53\nL664\nL11\nL89\nR20\nR80\nL17\nL81\nL187\nL83\nR62\nR88\nR477\nL259\nL80\nR80\nL63\nR363\nL362\nL38\nL4\nR73\nR31\nL90\nL86\nR776\nL43\nR13\nR25\nL65\nL91\nL857\nL38\nR47\nR909\nR56\nR156\nR72\nL90\nR84\nR22\nL40\nR44\nL544\nL79\nR57\nL176\nL49\nL842\nR29\nR816\nL16\nR14\nL63\nL21\nR25\nR45\nR30\nL30\nR78\nR22\nL11\nL89\nR46\nL35\nR89\nL93\nL23\nR69\nR33\nR12\nL286\nR88\nL93\nR85\nR9\nR87\nR12\nR92\nR64\nR454\nR17\nR2\nR71\nR78\nR41\nR581\nL525\nR25\nR94\nL94\nL21\nL79\nL22\nR94\nL59\nL813\nL70\nL63\nR933\nR43\nL43\nL75\nL25\nL363\nR63\nL88\nL612\nR62\nL3\nL59\nL609\nL791\nR46\nR65\nL8\nL9\nL45\nR11\nR57\nR245\nL784\nR72\nR47\nR13\nL910\nR97\nL97\nR96\nL87\nL97\nL12\nL81\nL974\nR55\nR51\nR40\nR23\nR180\nL97\nL91\nR21\nR967\nL315\nR51\nL30\nR70\nL93\nL49\nL71\nR491\nL7\nR59\nR67\nL56\nL56\nL761\nL3\nL491\nL41\nR47\nL6\nR95\nL6\nR15\nR96\nL79\nR991\nR94\nR605\nR9\nR80\nR79\nR17\nR869\nR35\nL62\nR762\nL238\nL504\nR42\nR921\nL86\nR340\nL975\nL13\nR13\nR829\nR10\nL7\nR68\nR975\nL32\nR35\nL86\nR71\nR37\nL82\nL85\nL40\nL6\nL187\nL51\nL23\nL626\nR88\nR69\nL91\nL6\nL9\nL34\nR28\nL734\nR71\nR18\nL10\nL876\nR24\nL38\nL843\nL39\nL384\nL34\nR599\nL99\nL31\nR31\nR67\nR33\nL375\nR32\nR89\nL46\nL23\nR476\nR88\nR94\nL93\nR75\nR96\nR99\nL12\nL8\nR808\nL31\nR91\nL460\nL89\nL61\nL324\nL88\nL636\nL6\nL4\nR8\nR95\nL30\nL65\nR870\nL39\nL81\nR47\nL97\nL30\nL349\nR410\nR16\nR181\nR40\nR710\nL68\nL10\nL47\nL70\nL183\nL18\nR18\nR57\nL64\nL55\nL6\nL32\nL50\nR57\nR79\nR4\nL390\nR94\nL372\nR855\nL63\nL7\nR491\nR88\nL6\nL704\nR20\nL96\nR33\nL27\nR261\nL129\nL87\nL58\nR2\nR32\nL319\nR72\nL22\nR172\nR75\nL22\nR88\nL71\nL19\nL81\nL19\nL81\nL30\nL70\nR37\nR63\nL25\nL75\nR70\nR125\nR353\nR954\nR38\nL38\nL58\nR38\nR90\nL872\nL317\nL39\nR477\nR79\nR43\nL338\nL79\nR474\nL45\nL98\nR43\nL95\nL5\nL56\nL644\nR1\nR61\nL55\nL29\nL29\nR56\nR692\nR58\nL73\nR86\nL30\nL54\nR85\nL69\nL606\nR6\nL60\nL77\nL14\nR51\nR16\nR5\nL35\nR14\nL866\nR66\nL3\nL57\nR99\nL39\nL50\nL42\nR697\nL4\nR70\nR31\nL88\nL35\nR58\nL796\nR44\nL22\nL63\nR1\nL598\nL66\nL37\nL617\nR17\nR92\nR426\nL98\nL45\nR816\nL91\nL49\nL697\nL57\nL93\nR206\nR90\nR891\nR9\nR97\nL19\nR122\nL34\nR852\nR76\nR960\nR24\nR31\nR84\nL93\nL51\nR551\nR422\nL83\nR83\nR25\nR192\nR161\nL8\nL7\nR59\nR56\nL384\nL16\nL20\nL405\nL75\nL90\nR390\nL46\nL65\nR94\nL56\nR24\nR49\nL582\nL18\nL656\nR43\nR199\nL60\nR99\nL93\nL568\nL64\nR76\nR85\nR34\nL95\nL450\nL850\nL44\nR62\nR57\nL63\nR63\nL22\nL18\nL935\nL167\nR67\nL6\nL894\nR39\nR57\nR55\nR44\nR51\nL348\nL52\nR22\nL31\nL14\nL16\nR43\nR9\nL43\nL81\nR73\nR47\nL555\nL51\nR139\nL88\nR891\nL392\nR43\nR45\nR19\nR988\nR86\nR20\nL49\nL51\nR10\nL67\nR76\nR81\nR797\nL97\nR204\nL4\nL178\nR13\nL635\nR26\nL8\nR82\nL10\nL290\nR75\nL75\nL70\nR792\nR78\nR28\nL377\nL51\nR9\nR73\nR664\nR83\nL41\nL22\nR34\nL644\nR14\nR37\nL796\nR89\nL14\nR14\nR99\nL2\nR3\nR75\nR731\nR8\nL14\nR15\nR85\nL587\nR87\nL58\nL11\nR89\nR680\nL101\nR6\nL79\nR82\nR24\nR68\nR36\nR99\nR84\nL19\nR18\nL13\nR13\nR90\nL8\nL53\nR730\nR90\nL41\nL26\nR87\nL29\nR42\nR928\nL9\nR68\nR89\nL76\nL261\nR61\nR40\nL80\nL25\nR6\nL91\nR51\nL29\nR28\nR83\nR557\nR53\nR64\nL57\nR95\nR19\nL60\nR46\nL94\nR63\nR10\nL79\nL3\nL97\nR17\nR94\nR489\nL27\nR481\nL45\nL842\nR631\nR45\nR23\nL66\nR76\nL970\nL6\nR67\nL67\nR39\nL63\nL76\nR7\nL511\nL96\nR23\nR669\nR75\nL67\nR962\nL64\nL176\nL93\nR76\nL417\nL56\nL301\nL531\nR81\nR88\nL48\nR379\nL39\nR39\nL532\nL17\nL32\nR81\nR46\nL84\nL62\nL13\nR129\nR5\nL717\nL304\nR44\nR56\nL35\nL27\nL20\nR35\nR85\nL438\nL93\nR359\nL266\nL87\nR82\nL88\nR41\nR52\nL611\nL389\nR233\nL33\nR46\nR54\nR6\nL46\nL775\nL33\nR836\nL88\nL47\nR38\nL4\nL387\nL833\nR326\nL93\nR98\nL354\nR56\nR26\nR74\nR527\nR487\nR119\nL21\nL790\nR34\nR644\nR3\nR41\nR643\nL87\nR872\nR28\nL343\nR766\nL123\nR91\nR59\nL82\nL186\nR45\nR71\nR52\nL272\nR870\nL61\nR2\nL97\nL92\nL79\nL52\nR31\nR53\nL53\nL46\nR90\nL44\nL774\nR74\nL59\nL15\nL812\nL14\nR67\nR23\nR610\nL4\nR4\nL30\nR91\nR99\nL60\nL36\nR13\nL4\nL73\nR422\nR533\nL61\nR6\nL894\nR39\nL45\nL45\nR73\nL28\nL18\nL82\nR72\nR28\nR22\nR59\nL52\nR43\nL83\nR63\nL52\nL10\nR78\nL68\nL24\nR24\nR53\nL53\nL6\nL41\nR47\nL57\nL11\nR68\nL247\nR93\nR43\nR43\nL5\nR51\nR66\nL444\nL63\nR75\nR14\nL79\nR1\nL838\nR90\nR12\nL173\nR27\nL78\nL97\nL5\nR14\nL98\nL73\nL51\nL78\nL78\nR62\nR58\nR90\nR7\nR9\nR94\nR25\nR57\nR96\nL91\nL81\nL79\nR99\nL68\nR33\nR80\nL50\nR88\nL1\nL93\nR343\nR85\nR7\nL92\nL42\nL75\nR79\nL26\nR264\nL63\nR37\nL630\nR77\nR14\nL39\nR555\nR36\nL87\nR1\nR83\nL240\nR99\nL27\nR987\nR97\nL3\nL13\nL84\nR75\nR50\nR449\nL585\nL33\nR64\nR12\nL32\nL321\nR53\nR10\nR58\nL88\nL12\nL199\nR99\nR99\nL31\nR632\nL49\nR70\nR82\nL703\nL187\nL86\nR44\nL10\nR339\nR841\nL81\nL60\nR891\nR39\nR5\nL3\nL283\nR51\nL456\nL6\nL87\nR165\nL97\nR15\nR86\nR80\nR12\nR88\nR65\nR17\nL725\nR43\nR332\nL20\nR816\nR145\nL73\nR125\nL80\nR29\nR26\nL42\nL58\nL620\nL76\nR33\nL17\nL42\nL378\nL20\nR33\nL13\nL86\nL834\nL91\nL55\nL59\nR21\nR966\nL73\nR11\nR725\nR75\nL2\nR2\nR99\nR18\nR80\nL97\nR42\nL42\nL66\nR43\nR51\nR2\nL30\nL55\nL868\nL15\nR38\nR324\nL33\nL65\nR74\nL78\nL22\nL882\nR82\nL61\nR293\nL40\nR8\nL51\nL49\nL96\nL4\nL55\nR74\nL657\nR27\nR92\nR5\nL86\nR50\nR8\nR42\nR93\nL483\nL10\nR82\nL247\nL93\nR58\nL502\nR37\nR65\nL138\nR988\nL50\nR32\nR94\nR74\nL28\nL44\nL876\nL1\nL51\nL15\nR84\nL69\nL17\nR76\nR21\nL80\nL19\nR87\nL22\nR74\nR80\nR33\nR87\nR770\nL70\nL20\nL92\nL26\nL98\nL84\nR98\nL34\nR27\nR9\nL79\nL21\nL90\nL190\nL62\nL67\nR538\nR58\nR2\nL89\nL973\nL27\nR44\nL44\nR558\nL362\nR97\nL67\nR71\nR3\nL23\nR748\nL625\nL50\nR50\nL69\nR69\nR15\nL996\nL19\nL979\nL122\nR1\nR656\nR330\nL29\nL94\nR37\nL26\nL74\nL93\nR20\nR58\nL42\nR21\nL264\nL3\nL963\nR25\nL758\nL57\nL44\nR30\nR6\nL19\nR64\nR2\nL83\nL84\nL96\nL75\nR55\nR44\nL92\nL76\nR435\nR289\nR99\nR1\nL178\nR78\nL231\nL69\nL35\nR232\nR8\nR7\nL84\nL22\nL6\nR90\nR10\nL968\nR368\nL87\nR76\nL32\nL157\nR373\nR572\nR90\nR5\nL46\nR24\nR72\nL90\nL63\nL63\nR26\nR727\nR52\nR221\nL22\nL18\nL67\nR824\nL17\nL78\nL89\nR17\nR50\nL355\nL94\nL51\nL68\nR663\nL76\nL88\nL83\nR52\nR48\nL48\nR40\nR27\nL67\nR433\nL83\nL37\nR87\nL28\nL77\nL18\nR73\nL8\nR44\nR22\nL91\nR83\nL63\nL37\nL4\nL32\nL64\nL137\nR37\nR25\nR81\nR94\nR54\nL76\nR11\nL189\nL78\nL22\nL10\nL345\nR28\nL32\nR65\nR25\nR14\nL45\nL145\nR20\nL62\nR19\nL72\nR64\nL24\nL9\nR9\nR5\nR149\nR512\nL90\nR524\nR815\nR885\nR87\nL44\nR38\nR19\nL81\nR19\nR62\nR83\nR17\nL921\nR62\nL63\nL78\nR41\nL41\nL544\nL22\nL34\nR97\nR91\nR20\nR92\nL88\nL50\nR38\nR98\nL98\nR10\nL310\nL67\nL33\nR81\nR89\nR7\nR70\nL71\nR99\nR25\nL55\nR255\nL20\nR28\nL66\nL88\nR7\nL279\nR818\nR9\nL82\nL76\nL78\nL73\nR8\nL8\nR787\nR20\nL92\nR62\nR623\nL40\nL60\nL34\nR34\nL61\nL139\nR76\nR390\nR24\nL90\nR542\nL53\nR74\nR1\nR84\nL48\nL41\nL45\nL14\nL32\nR32\nR59\nL21\nL38\nL301\nL399\nL404\nL92\nL4\nR70\nR73\nR56\nR901\nR346\nR71\nL17\nR33\nR67\nL81\nL19\nR36\nR18\nL54\nR981\nL3\nR840\nL91\nL27\nR54\nL87\nR33\nR88\nR19\nL22\nR38\nL90\nR11\nL44\nL73\nR737\nL64\nL92\nL8\nR7\nL322\nR948\nR67\nR45\nR5\nR63\nR3\nL416\nL9\nL91\nR41\nL341\nL35\nR35\nL390\nR90\nR20\nL20\nL78\nR35\nR96\nL48\nL59\nR169\nL22\nR607\nR82\nL73\nR91\nL881\nL19\nR55\nR68\nL23\nL844\nL579\nR131\nR59\nL63\nL6\nL58\nL75\nR17\nR5\nL5\nL579\nR20\nL658\nR14\nL659\nL432\nL80\nR47\nR9\nL53\nR503\nL89\nL25\nR6\nL61\nL68\nR23\nR12\nL12\nR53\nL94\nL64\nR5\nR17\nR83\nL33\nR71\nL38\nL60\nL40\nR171\nL28\nR45\nL441\nR83\nL68\nL151\nR89\nL183\nL217\nR157\nR88\nR33\nL4\nR38\nR888\nR45\nR51\nR77\nL64\nL9\nR81\nR419\nR93\nR7\nR76\nR24\nL83\nL17\nR39\nR81\nL33\nL87\nR34\nR59\nL20\nR27\nL87\nL33\nL60\nL21\nL93\nL271\nR44\nR73\nR39\nL991\nR13\nR87\nL33\nL82\nR480\nL3\nL578\nL84\nL26\nR79\nR653\nR94\nR80\nL80\nR23\nL423\nL30\nL87\nL97\nL86\nR29\nR61\nR94\nR16\nL4\nL96\nL32\nL9\nR541\nR2\nR98\nR5\nR508\nL22\nL95\nR4\nL21\nL79\nR68\nL468\nL684\nR84\nL73\nL48\nR59\nL77\nL364\nL97\nL60\nL740\nR512\nL248\nL45\nR81\nL20\nL48\nR968\nR880\nL22\nR42\nR17\nR750\nL967\nR1\nR99\nR15\nR58\nR27\nR18\nL70\nL348\nR68\nL70\nR921\nR543\nL62\nR987\nL87\nL91\nL31\nR22\nR88\nL88\nL13\nR12\nR40\nL64\nR64\nL97\nR80\nL76\nL746\nR82\nR18\nL77\nR782\nL5\nL111\nL89\nL634\nL66\nL73\nR91\nR82\nL628\nR95\nR75\nR58\nR69\nR27\nL12\nR16\nR98\nR53\nR849\nL65\nL75\nR58\nR82\nR65\nL65\nR82\nR64\nR13\nL59\nL297\nR97\nR21\nL21\nR787\nL87\nL811\nR11\nL45\nL192\nR8\nL95\nR21\nR24\nR56\nR13\nL590\nR94\nR6\nR32\nR68\nR14\nL44\nL115\nR840\nR80\nR557\nR68\nR52\nR40\nL92\nR44\nL116\nR29\nL70\nL37\nR42\nR37\nR24\nL52\nR29\nL30\nL9\nR90\nL1\nR50\nR61\nR17\nR31\nR31\nR30\nR257\nL57\nR74\nL674\nR27\nR973\nR48\nR77\nL325\nL68\nR44\nL76\nR6\nL11\nL84\nL11\nR16\nR61\nR823\nR37\nL347\nL33\nL2\nL55\nL335\nR86\nR76\nL27\nR233\nL10\nR12\nL178\nL26\nL44\nR30\nR483\nL676\nL32\nR8\nL65\nL12\nR77\nR594\nL75\nL87\nL32\nR50\nL59\nR29\nR80\nR17\nR52\nR42\nR598\nL3\nL75\nL68\nL93\nR47\nL27\nR10\nL16\nL73\nR89\nL11\nR11\nR38\nL38\nR42\nL42\nL67\nR267\nR597\nR3\nL615\nR12\nL5\nR424\nR67\nR17\nL72\nL63\nL1\nL41\nR7\nL67\nL19\nL14\nR47\nL77\nL62\nL25\nR64\nL96\nL104\nR5\nR576\nR76\nL934\nR91\nL83\nL35\nL74\nL48\nL151\nL310\nL265\nR72\nL97\nL9\nR95\nL680\nL632\nR92\nR122\nL60\nR572\nR59\nR441\nR61\nR739\nR73\nL173\nR4\nR96\nL24\nR38\nR87\nR99\nL80\nL34\nL86\nR73\nR91\nR907\nL20\nL768\nR785\nR32\nL301\nR1\nR174\nL41\nL192\nR59\nL29\nR56\nL27\nL69\nR785\nR484\nL26\nL674\nR48\nR79\nL77\nR50\nR85\nL94\nL91\nR81\nL81\nL72\nR3\nR467\nR46\nL24\nL20\nR36\nL957\nL56\nL47\nR695\nR789\nR423\nR598\nR257\nR27\nL52\nL75\nL53\nR888\nR18\nR54\nR25\nL95\nR25\nR7\nR855\nR86\nL50\nL98\nL86\nR86\nR53\nL53\nL14\nL94\nL68\nL424\nR2\nL2\nR22\nR72\nR23\nL30\nL87\nR87\nL87\nL46\nR717\nR80\nR49\nR78\nL78\nL710\nL193\nR3\nR947\nR268\nR250\nR19\nR930\nR50\nR215\nR18\nR3\nR34\nR66\nL66\nR674\nL8\nL53\nL989\nR776\nL34\nL84\nL40\nR724\nL29\nL75\nR594\nL890\nR51\nL74\nL554\nL75\nL48\nR99\nR77\nR90\nR638\nL88\nR34\nL607\nL43\nL5\nR16\nR20\nR869\nL38\nR50\nL12\nR52\nL82\nL29\nL710\nR69\nL11\nL993\nR496\nL92\nL91\nR591\nR31\nR69\nR68\nR2\nL81\nR165\nL381\nR27\nL28\nL72\nR52\nL47\nL135\nL70\nL15\nR15\nR98\nL88\nL93\nR431\nR918\nR62\nR78\nL6\nL34\nL32\nR1\nR34\nR82\nR49\nR11\nR3\nR34\nR19\nL21\nL46\nR68\nR487\nR45\nL364\nR60\nL96\nR18\nL51\nR821\nR840\nR72\nR79\nL8\nL8\nR338\nR99\nR67\nL67\nL57\nL343\nL88\nL12\nL29\nR46\nR27\nL551\nR73\nR34\nL80\nR80\nR95\nR75\nL86\nR85\nR78\nR74\nR50\nR534\nL1\nR96\nL49\nR49\nL34\nL66\nR85\nR80\nL621\nR56\nL82\nL90\nR86\nR36\nR177\nR773\nL41\nL59\nL73\nR73\nL952\nL24\nR66\nL51\nR18\nR43\nL10\nL707\nL83\nR49\nL40\nL74\nL35\nR62\nL62\nR936\nR64\nL61\nL39\nL26\nL45\nL53\nL20\nR79\nL2\nL5\nL13\nR85\nL62\nL45\nR29\nR50\nL72\nL24\nL76\nL27\nL79\nR6\nR428\nR418\nL485\nR39\nL162\nR30\nR32\nR75\nR25\nL57\nL143\nL13\nR48\nL35\nL615\nR715\nL923\nL66\nL968\nL43\nL760\nR91\nL94\nR563\nR60\nR40\nR17\nL17\nR90\nR218\nL60\nR92\nL40\nR14\nR68\nR96\nL323\nL155\nR76\nR24\nL87\nL59\nL41\nL47\nL66\nL57\nL43\nL70\nR949\nL79\nL64\nL91\nR55\nL534\nR8\nL1\nR57\nR476\nL806\nR19\nR581\nR38\nL4\nR486\nL395\nL17\nL47\nR69\nL754\nR771\nL47\nR56\nL718\nR5\nL43\nL43\nL57\nL539\nL417\nL69\nL75\nL12\nL42\nR54\nL5\nL93\nL22\nL80\nR6\nL6\nR73\nL65\nL8\nR744\nL444\nR54\nL863\nR726\nL17\nR52\nL506\nR33\nL15\nL43\nL446\nR79\nL511\nL50\nL93\nR48\nL48\nL630\nR76\nL90\nR856\nL12\nL62\nR59\nR3\nR59\nR906\nL21\nR56\nL88\nL14\nL98\nL61\nR61\nL951\nL26\nR43\nL66\nL79\nR937\nR77\nR165\nL194\nL934\nR258\nR41\nR148\nL19\nR362\nR21\nL398\nL85\nR10\nL29\nL93\nR8\nR22\nR383\nL23\nR22\nL987\nR68\nL31\nR24\nL2\nR66\nR23\nR39\nR45\nR77\nR292\nR86\nL4\nL72\nL53\nR29\nL688\nR33\nR55\nL71\nR71\nL692\nL42\nR34\nR64\nL26\nR909\nL823\nR76\nL830\nR34\nL4\nL363\nR69\nL6\nL17\nL83\nR9\nL82\nR61\nR93\nL19\nR12\nR26\nL55\nL645\nL67\nR48\nL29\nL52\nL40\nR40\nR897\nR34\nR20\nL451\nR47\nR653\nL65\nR96\nR15\nR86\nL96\nR85\nL21\nR98\nR86\nR54\nR662\nL754\nR54\nR59\nR51\nL11\nR56\nR442\nR6\nR97\nR79\nL927\nL52\nL96\nL63\nR61\nL60\nR614\nL19\nL30\nL88\nL93\nR640\nL89\nR23\nR64\nR41\nR53\nL31\nL27\nR309\nL9\nL27\nR2\nL75\nR15\nR86\nL29\nL52\nR80\nL290\nL76\nL12\nR78\nL158\nL64\nL78\nL26\nL74\nR41\nR59\nL630\nL99\nR29\nL65\nR50\nR5\nR58\nR7\nL98\nR3\nL51\nR65\nL74\nR668\nR18\nR80\nL14\nR424\nR76\nL352\nR38\nL50\nR412\nR93\nR7\nL27\nL8\nR433\nL12\nL86\nL13\nR13\nL74\nR74\nL55\nR55\nR222\nR378\nR4\nL48\nL56\nR25\nL25\nR57\nL90\nR54\nR687\nL85\nL55\nL68\nR19\nR62\nR519\nL45\nL55\nR946\nL56\nR82\nR923\nR5\nR25\nR72\nL33\nL64\nL90\nR6\nR3\nR81\nR1\nR99\nR1\nL820\nR30\nL11\nL38\nR671\nL88\nR87\nL37\nL95\nL58\nL46\nR4\nL84\nL16\nL64\nR59\nR5\nR30\nL30\nR33\nL96\nR61\nL98\nR775\nR25\nL69\nL767\nL64\nR89\nL89\nR58\nR87\nL80\nR65\nL47\nL74\nR65\nL31\nR79\nL27\nL95\nL40\nR40\nR71\nL59\nR66\nR22\nR69\nR49\nR32\nL50\nR54\nR546\nR280\nR75\nR994\nR6\nL687\nR92\nR240\nL461\nL39\nL540\nR25\nL33\nR77\nL34\nR86\nL33\nL48\nR83\nR156\nR11\nL50\nL13\nL87\nL59\nR6\nL214\nL56\nL42\nR28\nL40\nL23\nL32\nL27\nR19\nL69\nL91\nR76\nL58\nR82\nL86\nR967\nL738\nR23\nR90\nR672\nL76\nL75\nL352\nL622\nL85\nL18\nL9\nL91\nL86\nR54\nL68\nR79\nL838\nR59\nL61\nL84\nR81\nR564\nR485\nL51\nR4\nL21\nL94\nL11\nL63\nL49\nR35\nL14\nL21\nL145\nL165\nL54\nL54\nR318\nL284\nL74\nR58\nR63\nR782\nR655\nL89\nR89\nL39\nL898\nL49\nR986\nR117\nR82\nR1\nR872\nR165\nL19\nR75\nR39\nL82\nR640\nR74\nL964\nL16\nL784\nL67\nR67\nR10\nR90\nR6\nL6\nR95\nR5\nL38\nR63\nL15\nR90\nR93\nR1\nR85\nL79\nL869\nR69\nL15\nR815\nL9\nL8\nL83\nL174\nL26\nL82\nR63\nL81\nL794\nL33\nR23\nL10\nR14\nL76\nR14\nL52\nR68\nR46\nL77\nR10\nR61\nR56\nL50\nR50\nL99\nL51\nL18\nR11\nL4\nR157\nR58\nL25\nR75\nR46\nR22\nR49\nR88\nL82\nL28\nL6\nR57\nL92\nL37\nL71\nR3\nR18\nR99\nL20\nL21\nR62\nL9\nL9\nR24\nL47\nL22\nR40\nR82\nR82\nL1\nR7\nR12\nL76\nR80\nR96\nL71\nR90\nR55\nL14\nL60\nR84\nL2\nR29\nL90\nR87\nL91\nL77\nR71\nL38\nL66\nR64\nR15\nR90\nR88\nR42\nL6\nR45\nR53\nL54\nR56\nR69\nR22\nR97\nR38\nR47\nL47\nR18\nL13\nL13\nR19\nL11\nR36\nR25\nL21\nL43\nR2\nR19\nR2\nL15\nL38\nL35\nL22\nL36\nL10\nL38\nR31\nL20\nL2\nL17\nR1\nR34\nL10\nR26\nR34\nR1\nR7\nR46\nL39\nR44\nL19\nR50\nR7\nR17\nL50\nL4\nR16\nR5\nR8\nL14\nR44\nL19\nR13\nL31"
+                        },
+                        {
+                            "name": "Password",
+                            "type": "integer",
+                            "value": 0
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "For_each_Combination": {
+                "type": "Foreach",
+                "foreach": "@body('Split_Input')",
+                "actions": {
+                    "Turn_Direction": {
+                        "type": "If",
+                        "expression": {
+                            "and": [
+                                {
+                                    "equals": [
+                                        "@items('For_each_Combination')['Rotation']",
+                                        "L"
+                                    ]
+                                }
+                            ]
+                        },
+                        "actions": {
+                            "Calculate_Turn_Dial_to_Left": {
+                                "type": "Compose",
+                                "inputs": "@sub(variables('Dial'), outputs('Calculate_Modulo'))"
+                            },
+                            "Set_Dial_after_turning_Left": {
+                                "type": "SetVariable",
+                                "inputs": {
+                                    "name": "Dial",
+                                    "value": "@outputs('Calculate_Modulo_Left')"
+                                },
+                                "runAfter": {
+                                    "Dial_Turn_Left_is_set_to_Zero_or_Passed_Zero": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Dial_Turn_Left_is_set_to_Zero_or_Passed_Zero": {
+                                "type": "If",
+                                "expression": {
+                                    "or": [
+                                        {
+                                            "and": [
+                                                {
+                                                    "less": [
+                                                        "@outputs('Calculate_Turn_Dial_to_Left')",
+                                                        0
+                                                    ]
+                                                },
+                                                {
+                                                    "not": {
+                                                        "equals": [
+                                                            "@variables('Dial')",
+                                                            0
+                                                        ]
+                                                    }
+                                                }
+                                            ]
+                                        },
+                                        {
+                                            "and": [
+                                                {
+                                                    "equals": [
+                                                        "@outputs('Calculate_Modulo_Left')",
+                                                        0
+                                                    ]
+                                                },
+                                                {
+                                                    "not": {
+                                                        "equals": [
+                                                            "@variables('Dial')",
+                                                            "@outputs('Calculate_Modulo_Left')"
+                                                        ]
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Increment_Password_for_being_Zero_after_Turning_Left": {
+                                        "type": "IncrementVariable",
+                                        "inputs": {
+                                            "name": "Password",
+                                            "value": 1
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                },
+                                "runAfter": {
+                                    "Calculate_Modulo_Left": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            },
+                            "Calculate_Modulo_Left": {
+                                "type": "Compose",
+                                "inputs": "@mod(add(mod(outputs('Calculate_Turn_Dial_to_Left'), 100), 100), 100)",
+                                "runAfter": {
+                                    "Calculate_Turn_Dial_to_Left": [
+                                        "SUCCEEDED"
+                                    ]
+                                }
+                            }
+                        },
+                        "else": {
+                            "actions": {
+                                "Calculate_Turn_Dial_to_Right": {
+                                    "type": "Compose",
+                                    "inputs": "@add(variables('Dial'), outputs('Calculate_Modulo'))"
+                                },
+                                "Set_Dial_after_turning_Right": {
+                                    "type": "SetVariable",
+                                    "inputs": {
+                                        "name": "Dial",
+                                        "value": "@outputs('Calculate_Modulo_Right')"
+                                    },
+                                    "runAfter": {
+                                        "Dial_Turn_Right_is_set_to_Zero_or_Passed_Zero": [
+                                            "SUCCEEDED"
+                                        ]
+                                    }
+                                },
+                                "Dial_Turn_Right_is_set_to_Zero_or_Passed_Zero": {
+                                    "type": "If",
+                                    "expression": {
+                                        "or": [
+                                            {
+                                                "and": [
+                                                    {
+                                                        "equals": [
+                                                            "@outputs('Calculate_Modulo_Right')",
+                                                            0
+                                                        ]
+                                                    },
+                                                    {
+                                                        "not": {
+                                                            "equals": [
+                                                                "@variables('Dial')",
+                                                                "@outputs('Calculate_Modulo_Right')"
+                                                            ]
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                "greater": [
+                                                    "@outputs('Calculate_Turn_Dial_to_Right')",
+                                                    99
+                                                ]
+                                            }
+                                        ]
+                                    },
+                                    "actions": {
+                                        "Increment_Password_for_being_Zero_after_Turning_Right": {
+                                            "type": "IncrementVariable",
+                                            "inputs": {
+                                                "name": "Password",
+                                                "value": 1
+                                            }
+                                        }
+                                    },
+                                    "else": {
+                                        "actions": {}
+                                    },
+                                    "runAfter": {
+                                        "Calculate_Modulo_Right": [
+                                            "SUCCEEDED"
+                                        ]
+                                    }
+                                },
+                                "Calculate_Modulo_Right": {
+                                    "type": "Compose",
+                                    "inputs": "@mod(outputs('Calculate_Turn_Dial_to_Right'), 100)",
+                                    "runAfter": {
+                                        "Calculate_Turn_Dial_to_Right": [
+                                            "SUCCEEDED"
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Add_Number_Full_Passes": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Calculate_Modulo": {
+                        "type": "Compose",
+                        "inputs": "@mod(items('For_each_Combination')['Clicks'],100)"
+                    },
+                    "Add_Number_Full_Passes": {
+                        "type": "IncrementVariable",
+                        "inputs": {
+                            "name": "Password",
+                            "value": "@div(sub(items('For_each_Combination')['Clicks'], outputs('Calculate_Modulo')),100)"
+                        },
+                        "runAfter": {
+                            "Calculate_Modulo": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Split_Input": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "runtimeConfiguration": {
+                    "concurrency": {
+                        "repetitions": 1
+                    }
+                }
+            },
+            "Password": {
+                "type": "Compose",
+                "inputs": "@variables('Password')",
+                "runAfter": {
+                    "For_each_Combination": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "triggers": {
+            "Recurrence": {
+                "type": "Recurrence",
+                "recurrence": {
+                    "interval": 12,
+                    "frequency": "Month"
+                }
+            }
+        }
+    },
+    "kind": "Stateful"
+}

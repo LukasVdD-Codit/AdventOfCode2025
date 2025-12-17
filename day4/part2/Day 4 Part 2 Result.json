@@ -1,0 +1,314 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "actions": {
+            "Initialize_variables": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "Output",
+                            "type": "string"
+                        },
+                        {
+                            "name": "RowIndex",
+                            "type": "integer",
+                            "value": 0
+                        },
+                        {
+                            "name": "MaxRows",
+                            "type": "integer",
+                            "value": 11
+                        },
+                        {
+                            "name": "PaperAmount",
+                            "type": "integer",
+                            "value": 0
+                        },
+                        {
+                            "name": "DeleteQueue",
+                            "type": "array",
+                            "value": "@createArray(32, 32, 32, 32, 12)"
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "Get_All_Rows": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "azuretables"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('day4part1')}/entities"
+                },
+                "runAfter": {
+                    "For_each_Message_Batch": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "For_each_Row": {
+                "type": "Foreach",
+                "foreach": "@outputs('Sort')",
+                "actions": {
+                    "Append_to_Output": {
+                        "type": "AppendToStringVariable",
+                        "inputs": {
+                            "name": "Output",
+                            "value": "@concat(items('For_each_Row')['Row'], '\n')"
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Sort": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "runtimeConfiguration": {
+                    "concurrency": {
+                        "repetitions": 1
+                    }
+                }
+            },
+            "New_Changes": {
+                "type": "If",
+                "expression": {
+                    "and": [
+                        {
+                            "not": {
+                                "equals": [
+                                    "@body('Read_blob_content')?['content']",
+                                    "@outputs('Trim_last_line')"
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "actions": {
+                    "Update_File": {
+                        "type": "ApiConnection",
+                        "inputs": {
+                            "host": {
+                                "connection": {
+                                    "referenceName": "azureblob-1"
+                                }
+                            },
+                            "method": "put",
+                            "body": "@outputs('Trim_last_line')",
+                            "headers": {
+                                "ReadFileMetadataFromServer": true
+                            },
+                            "path": "/v2/datasets/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/files/@{encodeURIComponent(encodeURIComponent('/day4/file1'))}"
+                        },
+                        "metadata": {
+                            "JTJmZGF5NCUyZmZpbGUy": "/day4/file2"
+                        }
+                    },
+                    "Send_message": {
+                        "type": "ApiConnection",
+                        "inputs": {
+                            "host": {
+                                "connection": {
+                                    "referenceName": "servicebus"
+                                }
+                            },
+                            "method": "post",
+                            "body": {
+                                "SessionId": "@guid()",
+                                "ContentData": "@base64(string(length(split(outputs('Trim_last_line'), '\n'))))"
+                            },
+                            "path": "/@{encodeURIComponent(encodeURIComponent('day4part2trigger'))}/messages",
+                            "queries": {
+                                "systemProperties": "None"
+                            }
+                        },
+                        "runAfter": {
+                            "Update_File": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    }
+                },
+                "else": {
+                    "actions": {
+                        "Get_All_PaperAmounts": {
+                            "type": "ApiConnection",
+                            "inputs": {
+                                "host": {
+                                    "connection": {
+                                        "referenceName": "azuretables"
+                                    }
+                                },
+                                "method": "get",
+                                "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('day4papercounts')}/entities"
+                            }
+                        },
+                        "For_each_PaperAmount": {
+                            "type": "Foreach",
+                            "foreach": "@body('Get_All_PaperAmounts')['value']",
+                            "actions": {
+                                "Increment_PaperAmount": {
+                                    "type": "IncrementVariable",
+                                    "inputs": {
+                                        "name": "PaperAmount",
+                                        "value": "@items('For_each_PaperAmount')['Amount']"
+                                    }
+                                }
+                            },
+                            "runAfter": {
+                                "Get_All_PaperAmounts": [
+                                    "SUCCEEDED"
+                                ]
+                            }
+                        },
+                        "Result": {
+                            "type": "Compose",
+                            "inputs": "@variables('PaperAmount')",
+                            "runAfter": {
+                                "For_each_PaperAmount": [
+                                    "SUCCEEDED"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Read_blob_content": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Trim_last_line": {
+                "type": "Compose",
+                "inputs": "@trim(variables('Output'))",
+                "runAfter": {
+                    "For_each_Row": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Convert_String_to_Int": {
+                "type": "Select",
+                "inputs": {
+                    "from": "@body('Get_All_Rows')['value']",
+                    "select": {
+                        "Row": "@item()['Row']",
+                        "RowIndex": "@int(item()['RowIndex'])"
+                    }
+                },
+                "runAfter": {
+                    "Get_All_Rows": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Sort": {
+                "type": "Compose",
+                "inputs": "@sort(body('Convert_String_to_Int'), 'RowIndex')",
+                "runAfter": {
+                    "Convert_String_to_Int": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Read_blob_content": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "containerName": "day4",
+                        "blobName": "file1"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "AzureBlob",
+                        "operationId": "readBlob",
+                        "serviceProviderId": "/serviceProviders/AzureBlob"
+                    }
+                },
+                "runAfter": {
+                    "Trim_last_line": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "For_each_Message_Batch": {
+                "type": "Foreach",
+                "foreach": "@variables('DeleteQueue')",
+                "actions": {
+                    "Get_Messages": {
+                        "type": "ServiceProvider",
+                        "inputs": {
+                            "parameters": {
+                                "queueName": "day4finishedruns",
+                                "messageCount": "@int(items('For_each_Message_Batch'))"
+                            },
+                            "serviceProviderConfiguration": {
+                                "connectionName": "azurequeues",
+                                "operationId": "getMessages",
+                                "serviceProviderId": "/serviceProviders/azurequeues"
+                            }
+                        }
+                    },
+                    "For_each_Message": {
+                        "type": "foreach",
+                        "foreach": "@outputs('Get_Messages')?['body']",
+                        "actions": {
+                            "Delete_message": {
+                                "type": "ServiceProvider",
+                                "inputs": {
+                                    "parameters": {
+                                        "queueName": "day4finishedruns",
+                                        "messageId": "@item()?['messageId']",
+                                        "popReceipt": "@item()?['popReceipt']"
+                                    },
+                                    "serviceProviderConfiguration": {
+                                        "connectionName": "azurequeues",
+                                        "operationId": "deleteMessage",
+                                        "serviceProviderId": "/serviceProviders/azurequeues"
+                                    }
+                                }
+                            }
+                        },
+                        "runAfter": {
+                            "Get_Messages": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Initialize_variables": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "triggers": {
+            "When_a_specified_number_of_messages_are_available_in_a_queue": {
+                "type": "ServiceProvider",
+                "kind": "Polling",
+                "inputs": {
+                    "parameters": {
+                        "queueName": "day4finishedruns",
+                        "threshold": 140
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "azurequeues",
+                        "operationId": "specifiedNumberOfMessagesAvailable",
+                        "serviceProviderId": "/serviceProviders/azurequeues"
+                    }
+                },
+                "recurrence": {
+                    "interval": 1,
+                    "frequency": "Minute"
+                }
+            }
+        }
+    },
+    "kind": "Stateful"
+}

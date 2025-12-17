@@ -1,0 +1,161 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "actions": {
+            "Initialize_variables": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "CurrentRow",
+                            "type": "array",
+                            "value": "@json(base64ToString(triggerBody()?['ContentData']))['rowCurrent']"
+                        },
+                        {
+                            "name": "AboveRow",
+                            "type": "array",
+                            "value": "@json(base64ToString(triggerBody()?['ContentData']))['rowAbove']"
+                        },
+                        {
+                            "name": "BelowRow",
+                            "type": "array",
+                            "value": "@json(base64ToString(triggerBody()?['ContentData']))['rowBelow']"
+                        },
+                        {
+                            "name": "Counter",
+                            "type": "integer",
+                            "value": 1
+                        },
+                        {
+                            "name": "MaxLength",
+                            "type": "integer",
+                            "value": "@sub(length(json(base64ToString(triggerBody()?['ContentData']))['rowCurrent']), 1)"
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "Until": {
+                "type": "Until",
+                "expression": "@equals(variables('Counter'), variables('MaxLength'))",
+                "limit": {
+                    "timeout": "PT10M"
+                },
+                "actions": {
+                    "Compose_Spaces_Around": {
+                        "type": "Compose",
+                        "inputs": {
+                            "aboveLeft": "@{variables('AboveRow')[sub(variables('Counter'), 1)]}",
+                            "aboveCenter": "@{variables('AboveRow')[variables('Counter')]}",
+                            "aboveRight": "@{variables('AboveRow')[add(variables('Counter'), 1)]}",
+                            "currentLeft": "@{variables('CurrentRow')[sub(variables('Counter'), 1)]}",
+                            "current": "@{variables('CurrentRow')[variables('Counter')]}",
+                            "currentRight": "@{variables('CurrentRow')[add(variables('Counter'), 1)]}",
+                            "belowLeft": "@{variables('BelowRow')[sub(variables('Counter'), 1)]}",
+                            "belowCenter": "@{variables('BelowRow')[variables('Counter')]}",
+                            "belowRight": "@{variables('BelowRow')[add(variables('Counter'), 1)]}"
+                        }
+                    },
+                    "Compose_String_Result": {
+                        "type": "Compose",
+                        "inputs": "@concat(outputs('Compose_Spaces_Around')['aboveLeft'],outputs('Compose_Spaces_Around')['aboveCenter'],outputs('Compose_Spaces_Around')['aboveRight'],outputs('Compose_Spaces_Around')['currentLeft'],outputs('Compose_Spaces_Around')['currentRight'],outputs('Compose_Spaces_Around')['belowLeft'],outputs('Compose_Spaces_Around')['belowCenter'],outputs('Compose_Spaces_Around')['belowRight'])",
+                        "runAfter": {
+                            "Compose_Spaces_Around": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Paper_around_lower_then_4": {
+                        "type": "If",
+                        "expression": {
+                            "and": [
+                                {
+                                    "less": [
+                                        "@length(replace(outputs('Compose_String_Result'), '.', ''))",
+                                        4
+                                    ]
+                                },
+                                {
+                                    "equals": [
+                                        "@outputs('Compose_Spaces_Around')['current']",
+                                        "@"
+                                    ]
+                                }
+                            ]
+                        },
+                        "actions": {
+                            "Send_message": {
+                                "type": "ApiConnection",
+                                "inputs": {
+                                    "host": {
+                                        "connection": {
+                                            "referenceName": "servicebus"
+                                        }
+                                    },
+                                    "method": "post",
+                                    "body": {
+                                        "SessionId": "@guid()",
+                                        "ContentData": "@base64(concat('valid space'))"
+                                    },
+                                    "path": "/@{encodeURIComponent(encodeURIComponent('day4part1grid'))}/messages",
+                                    "queries": {
+                                        "systemProperties": "None"
+                                    }
+                                }
+                            }
+                        },
+                        "else": {
+                            "actions": {}
+                        },
+                        "runAfter": {
+                            "Compose_String_Result": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    },
+                    "Increment_Counter": {
+                        "type": "IncrementVariable",
+                        "inputs": {
+                            "name": "Counter",
+                            "value": 1
+                        },
+                        "runAfter": {
+                            "Paper_around_lower_then_4": [
+                                "SUCCEEDED"
+                            ]
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Initialize_variables": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "triggers": {
+            "When_a_message_is_received_in_a_topic_subscription_(auto-complete)": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "servicebus"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/@{encodeURIComponent(encodeURIComponent('day4part1'))}/subscriptions/@{encodeURIComponent('day4part1')}/messages/head",
+                    "queries": {
+                        "subscriptionType": "Main"
+                    }
+                },
+                "recurrence": {
+                    "interval": 10,
+                    "frequency": "Second"
+                }
+            }
+        }
+    },
+    "kind": "Stateful"
+}

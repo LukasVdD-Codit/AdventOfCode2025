@@ -1,0 +1,161 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "actions": {
+            "Initialize_variables": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "OriginalLine",
+                            "type": "array",
+                            "value": "@chunk(base64ToString(triggerBody()?['ContentData']), 1)"
+                        },
+                        {
+                            "name": "Line1",
+                            "type": "array"
+                        },
+                        {
+                            "name": "Line2",
+                            "type": "array"
+                        }
+                    ]
+                },
+                "runAfter": {}
+            },
+            "Insert_Entity_(V2)": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "azuretables-1"
+                        }
+                    },
+                    "method": "post",
+                    "body": {
+                        "PartitionKey": "day3",
+                        "RowKey": "@{guid()}",
+                        "Value": "@{concat(outputs('Get_Max_1'), outputs('Get_Max_2'))}"
+                    },
+                    "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('day3part1output')}/entities"
+                },
+                "runAfter": {
+                    "Get_Max_2": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "runtimeConfiguration": {
+                    "staticResult": {
+                        "name": "Insert_Entity_(V2)0",
+                        "staticResultOptions": "Disabled"
+                    }
+                }
+            },
+            "For_each_Original": {
+                "type": "Foreach",
+                "foreach": "@variables('OriginalLine')",
+                "actions": {
+                    "Append_to_Line1": {
+                        "type": "AppendToArrayVariable",
+                        "inputs": {
+                            "name": "Line1",
+                            "value": "@int(item())"
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Initialize_variables": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "runtimeConfiguration": {
+                    "concurrency": {
+                        "repetitions": 1
+                    }
+                }
+            },
+            "Get_Max_1": {
+                "type": "Compose",
+                "inputs": "@max(take(variables('Line1'), int(sub(length(variables('OriginalLine')), 1))))",
+                "runAfter": {
+                    "For_each_Original": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Remaining_Numbers": {
+                "type": "Compose",
+                "inputs": "@chunk(substring(base64ToString(triggerBody()?['ContentData']), add(int(indexOf(base64ToString(triggerBody()?['ContentData']), string(outputs('Get_Max_1')))),1)), 1)",
+                "runAfter": {
+                    "Get_Max_1": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "For_each_Remaining": {
+                "type": "Foreach",
+                "foreach": "@outputs('Remaining_Numbers')",
+                "actions": {
+                    "Append_to_Line2": {
+                        "type": "AppendToArrayVariable",
+                        "inputs": {
+                            "name": "Line2",
+                            "value": "@int(item())"
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Remaining_Numbers": [
+                        "SUCCEEDED"
+                    ]
+                },
+                "runtimeConfiguration": {
+                    "concurrency": {
+                        "repetitions": 1
+                    }
+                }
+            },
+            "Get_Max_2": {
+                "type": "Compose",
+                "inputs": "@max(variables('Line2'))",
+                "runAfter": {
+                    "For_each_Remaining": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "triggers": {
+            "When_a_message_is_received_in_a_topic_subscription_(auto-complete)": {
+                "type": "ApiConnection",
+                "inputs": {
+                    "host": {
+                        "connection": {
+                            "referenceName": "servicebus-1"
+                        }
+                    },
+                    "method": "get",
+                    "path": "/@{encodeURIComponent(encodeURIComponent('day3part1'))}/subscriptions/@{encodeURIComponent('day3part1')}/messages/head",
+                    "queries": {
+                        "subscriptionType": "Main"
+                    }
+                },
+                "recurrence": {
+                    "interval": 10,
+                    "frequency": "Second"
+                }
+            }
+        },
+        "staticResults": {
+            "Insert_Entity_(V2)0": {
+                "status": "Succeeded",
+                "outputs": {
+                    "statusCode": "OK"
+                }
+            }
+        }
+    },
+    "kind": "Stateful"
+}

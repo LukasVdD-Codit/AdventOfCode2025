@@ -1,0 +1,194 @@
+{
+    "definition": {
+        "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+        "contentVersion": "1.0.0.0",
+        "actions": {
+            "Input": {
+                "type": "Compose",
+                "inputs": "fhj: afe puq pzy\navv: tve usj fft\nhpi: you vlf mll\nfmd: ses xxv\nvtx: mje kjy ggs\nkej: yyx\ngcq: vdr ilr rra xfs tic ybr bfr xms tti rws qnn hpo rig\nxpn: fym ams vxo\nggu: llp ehu uak\nuar: gcq vlf mll\nkye: aoy mim xsv ubi aht czb jos bnv fme gtv ywp ure zbb\noru: ufh sur\nmrh: out\nxcv: jet maj sql\ntlf: ztj\nzgu: yqg ccs\nvcs: ftb\necn: rts\ndsc: uav qgg qtd\niaf: bmk dcm aus vue fhj\npxw: xrg zok iql\niql: cvu ete cog irt bux ggu qce nkv uum xxq opb lnt iaf cgc ygm\nevg: ljm zqz\nyno: smx\nyou: tti sfh hwd rig vxm bfr tec hpo rws tic\nqce: ryx qgu rhm xql\nbnv: wki\nmva: zwn zik\nelx: sfo icu\nxsv: wiu kej\nqdk: hjb\nywp: sqm\nffh: ylg net\nlwu: iql zok rzm\npky: iyf wvy rvg\nioe: amw\nsit: vlf gcq you zec\netj: you mll\nvlf: rig nhi hpo qnn tti xjc vxm xms bfr ybr tic tec xfs rra ilr rqs hwd vdr\ndyy: ylg bic\noot: xid zya xpk lts\nxrg: iaf mhm zoa uum xxq opb ygm cgc zgu cog hdk cvu qce ifw nkv ggu bux yvi\ngmy: ltt olr\nxxb: btr\ncbl: qod shi\njaw: ojs mrt\nsbb: yzw\nqgt: xrg rzm zok\nwuk: tot ovj\njxh: rbb\ndac: smm nrx hqe\netm: bsx\nyjr: gvv\ntec: hhb tux xcv\ngce: xpn\nifw: dcm\njqj: gii ngp ere pcu\nlru: hft\ncxn: qgg\ntly: fvi cre\nmsd: eqe cgl kaw\nxui: gcq mll zec\nhws: mjr hvu\natr: zec vlf mll\nifl: sqb\njet: vpk\ndnp: hvy jeg\nxjc: hws jie\nkdu: ygd\nyaw: gug msu unz\nbwh: ypc\nroo: adm hvu fmi mjr\nbdg: iwx\nfwv: oqu tpa mbz\nxns: cyx\nalh: kqq xqa\njlg: hin srk inu zhs\njwk: aht ulo ubi xsv byj mim wgh xvv ehy ywp bnv jos fme wjn czb yjn\nubi: wki tnc pby\nmxn: wbq dnp\nbtr: gnn hew wgm wji\nxff: smx dul wuo\naht: trg lml\nnrs: zcw ycv vcm\nxlq: yfm onj\nlba: fmr qgt wsz\nsij: fkf azt nop fbq\nbov: zok xrg rzm\nvue: puq afe\nams: msu unz\nxms: roo jie\nabl: ggj dsp oot\nbsx: tve fft\npqc: hac lvi dmt tlf kth kzd etm yrx ebx mue\ntcb: jqj gfy kqt nly\ngov: zwn ykr rtt\nxcb: wgm hew mvc gnn\nwhh: fqn oeu mrq\nkla: zdg\nqtw: uoe qts\nalt: rts jju htm\nfqn: fzs jaw chx wwy\ndez: iyf wvy umq\nggj: zya xpk\nyjn: gce lml sqm\nzoa: dcm vue fhj\novj: out\ngvq: ygd fwv\nhrz: out\ndzh: wye bdf ytt\nhpm: htm rts hjb jju\niwx: alt bxp xba\nxqa: smi ehy czb bpn hvg gtv zbb nrs\nbgq: hzx eqe cgl kaw\nmaj: for\npgt: ywl\nykr: gqf cxy\nbxp: htm\nypc: out\nolr: ntd lwu ptv\nsgm: qgg qtd pqc\nfmr: iql zok xrg\nhtm: evg ifl lru cjx vqq xys\nuum: yqg ccs gao\nrqs: xhf yfd dwp jrq\nztj: iwx\ngnn: sbb\nvlq: out\njth: nsr\niyf: zcr rvv\navk: zcr zev\nolq: out\nazt: out\nccs: hlv xew esi qtq\nusj: skw czi ecn hlo\nhjb: bla tfb lru oje xnt tcb dhl xff qom hha vqq yno cjx evg zll rkj gui whh wkd xlt\nsqb: wsz fmr qgt\neyz: qtd qgg uav\nhhb: maj sql\neqe: hjb rts jju\nvpk: wuk okt jth\nvdr: eaf dcl rqy\nztl: sfo gvv\nwye: bwh jem zvu\nrvg: gbx\nxih: uav\nbeg: fwv csb kqv\npam: htm\nfoa: sfo\nvcm: lmi\naks: you vlf\nftb: vlf gcq mll\nuxb: zhs hin mzv\ndcm: afe\nwuo: qzg wop pxw\njem: qov ypc\nokw: bdg qnb ztj\nqod: vlf zec\nqtd: qsv mue ysa okw ebx etm kth zkb\nhjc: qtd pqc uav\nlvp: qtd qgg\nmzv: umt fuy\nvmq: kye\nzcr: rts jju htm\nxhf: hva oqs\nklr: dsc ygo sgm bvl\ngug: mll\ntux: maj\nuim: bem dac gje\ncsb: uzn tpa\noks: rkm kvi\nsrk: ueh fuy umt nyh ioe\nwkd: lgx sqb\nrig: jrq xhf\nere: gmi ggg olr\nqgq: buv wbq zdg\nfmm: xag dez ans csl\ndoc: rvk cyx\npuq: kqq\nggs: pam\nrws: jie roo\nnkv: ekg tqz jxh\ncog: llp uak ehu\nwbq: xih jeg\nwrz: ssy\najk: hod sit\npqr: xrg rzm zok\nisk: mje kjy ggs\nxip: fkf\nzvu: qov qmv\nyfm: uoe gxa\ngtv: pby tnc\ngii: gmi xwj ltt\nonj: gxa\nusz: wgm wji hew mvc gnn\nfzs: cjf ojs\nnhi: eaf dcl rqy\nnsr: out\nklt: wbq\nmvt: usj tve\nqnb: qhi kjv\nbic: svh\nyoi: fmd abl hcq xjt rhl jpv elf oks oxv mva qgq cih xxb klt kla ybg nzs qvh gov vvw tqb\nxlt: jqj gfy aml nly\nxxq: tly rhm ryx xql\ngjq: xqa kye kqq jwk\nzev: htm\nvqq: xjw fqn yom oeu\nbfr: amz uxb jlg\nyfd: hva dzh\nyvi: hbk ccs\nopb: xql tly qgu\nxpk: pxk lvp\nzdg: hvy\nbvu: kqv ygd csb\nmor: nxo dko\navq: elx foa ztl quj\ngui: smx wuo\nsvr: dth yoi nkf crg nnt\nunz: zec gcq mll\nwyg: sgm ygo dsc yzw bvl\ngve: qod shi hod fyk\nxvv: swe uim fdr\ndvm: elx yjr foa ztl quj\nfym: gug unz\npxk: qtd pqc uav\ngqf: qgg qtd uav\nqts: olq qhj\nhft: yxn qer rzp\nzya: lvp dan cxn pxk\nskp: tcu ams vxo\nukg: okt\nhlo: jju rts hjb htm\niig: eyz hjc yqe\ndhl: ore\nlml: xpn\nwji: wyg klr yod\numt: amw sij hxi xip rkw\ninu: ueh\ntqz: uhy rbb ywl\nafe: xqa jwk\ndsp: xpk zya lts\nchx: cjf mrt ojs ybw\nybw: zok\ntay: fft\nlnt: tqz\ngxa: oqa qhj evk hrz olq\nyqe: qtd qgg pqc\nmll: tti rra vdr sfh xms bfr nhi hpo tic rws ybr\ntve: skw ecn\noqa: out\njju: nde wkd whh xlt yno cjx vqq evg xnt dhl xys qom tfb oje\ntpa: out\nhlv: alh vmq tyf mwe\nekg: ywl lzy rbb\ntqb: xcb btr\nkqq: aht ulo ubi xsv wgh mim aoy xvv zbb nrs hvg ure ywp gtv bpn wjn sku bnv jos smi czb\nshc: qtw dyl oid yfm\nqom: dyy\nlmi: atr ssy\noje: ore\nnrx: jpj\nbjq: srk hin inu\nfdr: dac mpr jjx\nwjb: csl xag ans\nybr: bjq uxb\ncxy: pqc qtd qgg\ncuu: eyz hjc\nryx: sdr xsd fvi\nmjr: beg\nhzx: hjb rts\nsql: vpk ukg\nbrz: sur ufh fnt\nubx: hjb rts\nqtq: tyf vmq alh mwe nay\njos: uim pty\nhvg: gce lml\nxuz: fgt\nctg: ise vtx isk\nhod: mll zec\nkaw: jju hjb\nnyh: sij amw rkw hxi\nzqz: bic ylg\nfor: wuk jth okt\nhha: gfy jqj aml nly\nfvi: jwk\ntsm: rzp\nzkb: avv yuq mvt bsx\ndeg: quj\nlzy: scp pbc\nrts: xys dhl xff qom bla tfb ifl lru oje zll nde rkj gui whh xlt cjx yno vqq evg\nfft: hlo czi qdk\nzwn: cxy\niyd: atp dbq bwh\nore: qer rzp\nmpr: nrx\nelf: deg dvm avq ses\nqhi: srn\ndwp: hva\nzbb: eyf lhc\nuff: uar\nnet: kes ffw\nueh: xip sij\nmje: hpm pam ubx\nowz: bgq msd njb\ntvy: yon xui aks uar\nxnt: lba\nwiu: yyx uff zzd\nqzi: uff tvy\newx: qgg qtd\ngao: hlv\nise: ggs\nrzr: uav pqc\nzik: rzr ewx nzq\nicu: pqc uav qtd\nnso: ipn\nltt: lwu ntd\nsfo: qtd uav\nbvl: qtd\nxew: alh tyf mwe nay\nxfs: bjq\nhin: ioe nyh fuy ueh\nqer: ldj pqr mog bov\nhxi: vlq\njie: fmi hvu\noxv: kvi rkm cuu\ncgl: htm\nkqt: pcu ngp\nyog: ftb\nrhm: fvi xsd sdr bpa\nnzq: pqc\njpv: usz\nbux: ccs gao hbk\nuzn: out\ngje: smm hqe\nadm: beg bvu kdu\nygo: qtd pqc\nfmi: ofd gvq bvu beg\nbla: wuo smx\nlhc: mor vcs yga\nhpo: jie\numq: gbx\nqhj: out\nhcq: rvi oot dsp\nygd: mbz uzn tpa\naep: ewx cxy rzr\ncre: jwk kqq kye xqa\nscp: kqq kye xqa\nehy: vcm zcw\nhvy: pqc qgg qtd\nmnn: qnb\nure: afq fdr\nylg: svh kes ffw\nfuy: rkw\nrhl: xxv ses avq deg\nngp: ggg ltt\nqnn: zwy dwp jrq yfd\ntyf: kqq jwk kye\nlyn: yfm qtw dyl\nmrq: wwy chx fzs weu\nzec: qnn rws rig xjc vdr sfh hwd rqs tti\nyga: hpi ftb\nhwd: bjq jlg\nkth: njb msd yim\ncgc: tly ryx\nggg: lwu\njrq: hva\neyf: yga ysl yog\ngfy: pcu gmy\naoy: kej qzi\nxmu: xlq lyn\noqu: out\noeu: chx\nirt: fhj aus dcm\nyce: hod fyk qod sit\nfgk: kye xqa jwk\ngzp: iwx qhi kjv\nldj: iql rzm\nfnt: ise\nrvi: zya\nczb: lhc eyf\ntfb: ljm\nweu: ybw\nokt: tot mrh\ntic: uxb\npcu: gmi ltt\nilr: rdr tux\nwob: vlf gcq\ncsl: avk\nkjy: ubx hpm\ntti: rdr hhb\ncjx: xjw yom fqn oeu\nwvy: zcr\nwwy: ojs mrt cjf\nyrx: ipn wjb\nxba: hjb\nyzw: qgg pqc\nrra: dcl eaf xmu\ngbx: htm hjb jju\nuva: fgt cyx rvk\nnay: kye xqa jwk\nkjv: bxp xba\nzcw: wrz qlj\nsmx: wop pxw\naus: pzy puq\noid: qts gxa\nhac: njb\nrbb: scp pbc\npbc: jwk xqa\nkes: iql zok xrg rzm\nmbz: out\nrtt: nzq\nuhy: scp pbc gjq fgk\nnop: out\ndth: vvw gov tqb kla cih xxb klt ybg qvh nzs elf oks xjt rhl jpv mva fmd hcq qbj\nbmk: pzy\nvxm: jrq yfd xhf\nzzd: aks xui\nllp: xns doc\nkzd: ctg\nsqm: skp\nwgm: yod sbb\ndbq: ypc qmv\nhdk: llp\nxxv: quj ztl foa yjr\nufk: yqe oyc eyz\noyc: qgg\nqbj: deg avq dvm xxv\nntd: xrg iql\nffw: rzm\nyxn: bov mog pqr\nmsu: gcq vlf mll zec you\nhva: wye\nshi: you gcq mll vlf\njmh: tcu yaw ams fym\nsvh: iql xrg rzm\njpj: zec vlf\nuav: mnn brz yrx etm okw qsv nso\nhqe: avp wob\nhew: wyg\nwrt: vlf mll zec\nwyc: you gcq mll\neaf: xhl\namw: nop fbq fkf vlq\ncih: usz xcb btr\nvxo: umv\nsmi: zwl vcm ycv zcw\nsdr: xqa\numv: gcq zec you\nfkf: out\nxwj: lwu ntd\nmhm: jxh pgt ekg\ntcu: gug\nrzp: bov ldj mog\nxjt: dnp zdg wbq\nqvh: rtt aep zik zwn\nbem: nrx hqe\nfbq: out\ncjf: rzm xrg iql\nuoe: evk\nxid: cxn\nxjw: weu fzs\npzy: kye\nbuv: jeg\ncrg: qbj abl klt xxb tqb qgq jpv mxn rhl vvw\nquj: gvv sfo icu\nnde: ffh zqz\ncvu: bmk dcm vue\nczi: hjb rts\nmrt: xrg iql\nqlj: atr\ngmi: lwu\nwop: zok xrg rzm\nsrn: rts jju\nmvc: yod klr sbb\nxag: rvg umq wvy iyf\nnjb: hzx kaw\nmue: gzp ztj\nskw: jju htm\nevk: out\nlts: lvp cxn\nsku: zwl\ngvv: qtd qgg uav\ndul: pxw qzg\nywl: pbc gjq fgk\nxys: qtz\nqsv: msd bgq yim\navp: mll you\nhbk: esi xew hlv\nswe: gje bem mpr jjx\nscj: xag\nyyx: xui yon\nqov: out\nkvi: hjc\nnly: gmy ere pcu ngp gii\nyqg: hlv qtq\nnol: vcs yga ysl\nwsz: zok iql xrg\nrkj: tsm hft\nrzm: iaf lnt opb zoa uum xxq ygm cgc zgu hdk cog irt cvu ete nkv ifw qce ggu yvi bux\nebx: ipn scj fmm\nvvw: kvi ufk iig\ntnc: cbl ajk gve yce\namz: inu zhs mzv hin\nygm: qgu tly rhm\nyom: weu wwy chx jaw\nytt: zvu\ntrg: jmh skp xpn\nuak: doc uva xuz\nrkm: yqe hjc\nlvi: yim bgq njb\nssy: mll vlf\nbpn: lhc\naml: gii ere gmy pcu\nycv: lmi ayq\nmwe: xqa kye\nptv: zok iql xrg rzm\ndmt: bsx tay avv\ndcl: lyn\nysl: dko\natp: ypc\nzok: ifw iaf hdk cgc zoa\nyod: yzw bvl ygo\nulo: sqm trg\nrdr: sql maj\nwki: cbl yce gve\nans: umq wvy\nxsd: xqa kqq\nqgu: cre bpa xsd sdr\nrqy: shc xhl lyn\nrkw: azt\nnnt: ybg nzs kla xxb tqb vvw mxn gov hcq abl qbj fmd qgq mva elf oks oxv rhl xjt\nmim: nol lhc eyf\nojs: xrg rzm zok\nqmv: out\ncyx: kye jwk\nzhs: ioe umt fuy ueh\nses: elx\nyon: zec you vlf\nfyk: mll gcq you\nofd: fwv\nhvu: ofd gvq\nsmm: wrt avp etj wob\nyuq: usj tve\nqtz: bic\nrvk: xqa\nljm: ylg bic net\nesi: vmq tyf nay\njjx: nrx\nqzg: xrg rzm iql\nysa: wjb ipn fmm scj\nybg: oot rvi ggj dsp\nmog: rzm xrg\nafq: jjx dac mpr bem\nfme: lhc\nlgx: wsz qgt fmr\nyim: kaw eqe hzx\nehu: uva xns xuz\nayq: ssy wyc atr\nipn: pky xag\nzwy: dzh oqs\ntot: out\nxql: bpa xsd cre\nete: ekg pgt jxh\nrvv: htm rts hjb jju\nfgt: kye xqa kqq\nsur: isk\nbyj: wiu kej\nqgg: oru nso ebx owz ysa qsv etm yrx kzd mnn kth\nnxo: mll gcq you zec\nwgh: afq swe\nkqv: oqu uzn\nzwl: qlj ayq wrz lmi\nzll: xjw yom oeu\ndko: gcq mll vlf you\nbdf: atp zvu jem\noqs: bdf iyd ytt\nsfh: roo hws\nnkf: abl nzs hcq cih kla tqb jpv oks\npby: ajk yce\nbpa: kye\nnzs: avq dvm xxv ses\npty: jjx mpr bem\ndyl: gxa qts\nufh: ise vtx\njeg: pqc qtd qgg\nxhl: yfm oid onj qtw\ndan: uav qgg qtd\nwjn: wki tnc pby",
+                "runAfter": {
+                    "Initialize_variables": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Initialize_variables": {
+                "type": "InitializeVariable",
+                "inputs": {
+                    "variables": [
+                        {
+                            "name": "Code",
+                            "type": "string",
+                            "value": "@{last(split(body('Get_Messages')[0]['content'], ' '))}"
+                        },
+                        {
+                            "name": "AllCodes",
+                            "type": "string",
+                            "value": "@{body('Get_Messages')[0]['content']}"
+                        }
+                    ]
+                },
+                "runAfter": {
+                    "Delete_message": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Filter_array": {
+                "type": "Query",
+                "inputs": {
+                    "from": "@split(outputs('Input'), '\n')",
+                    "where": "@equals(startsWith(item(), variables('Code')), true)"
+                },
+                "runAfter": {
+                    "Input": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "For_each_Next": {
+                "type": "Foreach",
+                "foreach": "@split(trim(last(split(first(body('Filter_array')), ':'))), ' ')",
+                "actions": {
+                    "Out_reached": {
+                        "type": "If",
+                        "expression": {
+                            "and": [
+                                {
+                                    "equals": [
+                                        "@items('For_each_Next')",
+                                        "out"
+                                    ]
+                                }
+                            ]
+                        },
+                        "actions": {
+                            "Is_Correct": {
+                                "type": "If",
+                                "expression": {
+                                    "and": [
+                                        {
+                                            "equals": [
+                                                "@contains(variables('AllCodes'), 'fft')",
+                                                "@true"
+                                            ]
+                                        },
+                                        {
+                                            "equals": [
+                                                "@contains(variables('AllCodes'), 'dac')",
+                                                "@true"
+                                            ]
+                                        }
+                                    ]
+                                },
+                                "actions": {
+                                    "Insert_Entity_(V2)": {
+                                        "type": "ApiConnection",
+                                        "inputs": {
+                                            "host": {
+                                                "connection": {
+                                                    "referenceName": "azuretables"
+                                                }
+                                            },
+                                            "method": "post",
+                                            "body": {
+                                                "PartitionKey": "day11",
+                                                "RowKey": "@{guid()}",
+                                                "Reached": "out"
+                                            },
+                                            "path": "/v2/storageAccounts/@{encodeURIComponent(encodeURIComponent('AccountNameFromSettings'))}/tables/@{encodeURIComponent('day11')}/entities"
+                                        }
+                                    }
+                                },
+                                "else": {
+                                    "actions": {}
+                                }
+                            }
+                        },
+                        "else": {
+                            "actions": {
+                                "Add_a_message_to_queue": {
+                                    "type": "ServiceProvider",
+                                    "inputs": {
+                                        "parameters": {
+                                            "queueName": "day11",
+                                            "message": "@concat(trim(variables('AllCodes')), ' ', items('For_each_Next'))"
+                                        },
+                                        "serviceProviderConfiguration": {
+                                            "connectionName": "azurequeues",
+                                            "operationId": "putMessage",
+                                            "serviceProviderId": "/serviceProviders/azurequeues"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "runAfter": {
+                    "Filter_array": [
+                        "SUCCEEDED"
+                    ]
+                }
+            },
+            "Get_Messages": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "queueName": "day11",
+                        "messageCount": 1
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "azurequeues",
+                        "operationId": "getMessages",
+                        "serviceProviderId": "/serviceProviders/azurequeues"
+                    }
+                },
+                "runAfter": {}
+            },
+            "Delete_message": {
+                "type": "ServiceProvider",
+                "inputs": {
+                    "parameters": {
+                        "queueName": "day11",
+                        "messageId": "@body('Get_Messages')[0]['messageId']",
+                        "popReceipt": "@body('Get_Messages')[0]['popReceipt']"
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "azurequeues",
+                        "operationId": "deleteMessage",
+                        "serviceProviderId": "/serviceProviders/azurequeues"
+                    }
+                },
+                "runAfter": {
+                    "Get_Messages": [
+                        "SUCCEEDED"
+                    ]
+                }
+            }
+        },
+        "outputs": {},
+        "triggers": {
+            "When_a_specified_number_of_messages_are_available_in_a_queue": {
+                "type": "ServiceProvider",
+                "kind": "Polling",
+                "inputs": {
+                    "parameters": {
+                        "queueName": "day11",
+                        "threshold": 1
+                    },
+                    "serviceProviderConfiguration": {
+                        "connectionName": "azurequeues",
+                        "operationId": "specifiedNumberOfMessagesAvailable",
+                        "serviceProviderId": "/serviceProviders/azurequeues"
+                    }
+                },
+                "recurrence": {
+                    "interval": 2,
+                    "frequency": "Second"
+                }
+            }
+        }
+    },
+    "kind": "stateful"
+}
